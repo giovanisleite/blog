@@ -6,8 +6,8 @@ permalink:           /:categories/:title/
 
 # Setup
 title:               Giovani
-tagline:             'Python Developer'
-description:         'I am still learning'
+tagline:             'Desenvolvedor'
+description:         'Eae =)'
 url:                 https://giovanisleite.github.io/
 baseurl:             ''
 paginate:            5
