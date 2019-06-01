@@ -20,7 +20,7 @@ Para obtermos os vídeos que fazem parte da playlist podemos fazer através da r
 
 O nosso segundo ponto é montar playlists. Eu encontrei no stackoverflow uma resposta em algum momento, mas não guardei os links e não consegui encontrar novamente.
 
-<div style="text-align:center">
+<div style="text-align:center; margin: 30px 0;">
     <figure>
         <img width="50%" src="https://media.giphy.com/media/XhWvodKpLzk40/giphy.gif" alt="DESCULPA!">
         <figcaption>Desculpa!</figcaption>
@@ -64,7 +64,7 @@ Tendo isso é executada a outra parte, `parse.parse_qs('v=SrqImCs9h6s&list=PLJ85
 
 Tendo esse `dict`, pegamos o primeiro valor que está dentro da chave `list`. Que, finalmente, é o identificador da nossa playlist!!!!
 
-<div style="text-align:center">
+<div style="text-align:center; margin: 30px 0;">
     <figure>
         <img width="50%" src="https://media.giphy.com/media/jVStxzak9yk2Q/giphy.gif" alt="Its about damn time">
         <figcaption>FINALMENTE!</figcaption>
@@ -128,7 +128,7 @@ Agora podemos maratonar Guetonomia tranquilamente na ordem cronológica, [clican
 https://www.youtube.com/watch_videos?video_ids=3SEh4p1F39M,-kTQkNM7qt8,qY22Oterog4,alN51X5HUPk,bg9eCFqj-G8,Eb7835lnf_I,B314Jg6GygY,IUL-yASGlU8,gmQEczeLifU,9kaT4m8e6M0,no8HsSJ_0CQ,xZ6-Nj4tacU,XX5t8qKV79U,ucHKIiZpz0M,6v9mOVxRL3c,fLt0Zon4UC8,VQThJm1yBS0,lFmkZXHQsVg,kpCCZCXhzCY,s3TZqypvvH8,S5P7HJ3ZZck,rzKTvWlX_ns,K_7QtcBdU8Q,4QpXhe_SvyI,R8yBRs-gPZU,UVlAYHsIB2g,SrqImCs9h6s
 ```
 
-<div style="text-align:center">
+<div style="text-align:center; margin: 30px 0;">
     <figure>
         <img width="50%" src="https://media.giphy.com/media/l46CkATpdyLwLI7vi/giphy.gif" alt="Criança com chapéu de festa impressionada e sorrindo">
         <figcaption>UHUUUL!</figcaption>
