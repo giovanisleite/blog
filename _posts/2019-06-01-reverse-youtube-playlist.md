@@ -1,0 +1,158 @@
+---
+title: Invertendo playlist do youtube com python
+date: 2019-06-01
+comments: true
+layout: post
+keywords: "playlist, youtube, python"
+---
+
+## Motivação
+
+Em um dos episódios do [Quebradev](https://quebradev.com.br/a-resistencia-da-quebrada/) eles indicaram o [Guetonomia](https://www.youtube.com/watch?v=-kTQkNM7qt8), trampo foda do pessoal do [Canal Por Quê?](https://www.youtube.com/channel/UCqWMwhpW-rggQZtfNXIqkrw), que explica conceitos de economia com exemplos mais próximos da nossa realidade (Salve, [Paulo Freire](https://pt.wikipedia.org/wiki/Paulo_Freire)).
+
+Eu curti bastante os vídeos deles, (fica aí a indicação, tanto do Quebradev quanto do Guetonomia!) e queria maratonar os vídeos começando pelos mais antigos até chegar nos mais recentes. Só que a playlist deles está na ordem inversa e o youtube não te dá a opção de inverter. Então, bora inverter com código!
+
+## Dá pra fazer?
+
+Para conseguirmos inverter a playlist há dois pontos cruciais, tendo a url de uma playlist, precisamos conseguir identificar os vídeos que fazem parte dela e montar uma nova playlist com esses vídeos na ordem inversa.
+
+Para obtermos os vídeos que fazem parte da playlist podemos fazer através da raspagem de dados ([^1]), que, em poucas palavras, seria tentar acessar a página e pegar os links para os vídeos de forma automatizada, ou utilizando um serviço (API), que, basicamente, é um servidor onde podemos pedir e obter essa informação. Como o google disponibiliza [um serviço para isso](https://developers.google.com/youtube/v3/docs/playlistItems) ([^2]), vamos utilizá-lo.
+
+O nosso segundo ponto é montar playlists. Eu encontrei no stackoverflow uma resposta em algum momento, mas não guardei os links e não consegui encontrar novamente.
+
+<div style="text-align:center">
+    <figure>
+        <img width="50%" src="https://media.giphy.com/media/XhWvodKpLzk40/giphy.gif" alt="DESCULPA!">
+        <figcaption>Desculpa!</figcaption>
+    </figure>
+</div>
+
+
+Mas juntando algumas respostas, deu certo depois de um tempo!!! Então, é possível montar uma playlist montando um link com os identificadores dos vídeos (Sequência estranha de letras e números que aparece na url dos vídeos) e eu achei bem melhor do que usar o serviço que o google disponibiliza para isso porque todas as playlists seriam criadas pertencendo a minha conta e faria uma bagunça por lá.
+
+## Bora pro código
+
+Vamos obter as informações sobre a playlist usando o serviço do google, para isso temos que enviar o identificador da playlist. Esse identificador aparece na url, tipo o do vídeo que foi comentado ali em cima. Por exemplo, vamos entender isso com essa url aqui 
+```
+https://www.youtube.com/watch?v=SrqImCs9h6s&list=PLJ85jmdKU96JIZjV6Rpbc1ZidaClDdnpF
+```
+
+Dá para dividir em partes menores ([^3]), mas vamos simplificar aqui, temos:
+- O host `https://www.youtube.com/` que é o site para qual estamos indo;
+- O `/watch` é a página do site que queremos;
+- A seguir, `v=SrqImCs9h6s&list=PLJ85jmdKU96JIZjV6Rpbc1ZidaClDdnpF`, têm duas coisas, o `v` e o `list` que estamos especificando o que queremos. No caso do youtube, o `v` é de vídeo e o `list` é a playlist. Então com esses paramêtros estamos dizendo que queremos o vídeo `SrqImCs9h6s` e a playlist `PLJ85jmdKU96JIZjV6Rpbc1ZidaClDdnpF`.
+
+Para conseguirmos a informação sobre a playlist precisamos enviar esse identificador. Então, vamos supor que o serviço que estamos criando nesse momento (O invertedor (?) de playlists do youtube), receba a url de uma playlist, como a que nós dividimos ali em cima. Precisamos extrair o valor do paramêtro `list`. Fazemos isso com o seguinte código: 
+
+```python
+from urllib import parse
+
+def extract_playlist_id(playlist_url):
+    return parse.parse_qs(parse.urlparse(playlist_url).query)['list'][0]
+```
+
+Que para falar a real, é um péssimo código né. Olhando assim não dá para entender muita coisa. Vamos por partes. Vamos ver o que cada parte faz, `parse.urlparse(playlist_url)`, divide a url em várias partes ([^3]). A parte que nos interessa é chamada de `query`, que é onde está o `list`.
+Então, isso aqui `parse.urlparse(playlist_url).query` nos retorna `v=SrqImCs9h6s&list=PLJ85jmdKU96JIZjV6Rpbc1ZidaClDdnpF`.
+Tendo isso é executada a outra parte, `parse.parse_qs('v=SrqImCs9h6s&list=PLJ85jmdKU96JIZjV6Rpbc1ZidaClDdnpF')`. Essa transforma a [string](http://excript.com/python/tipos-de-dados-python.html) em um [dict](http://excript.com/python/tipos-de-dados-python.html):
+
+```python
+{
+    'v': ['SrqImCs9h6s'],
+    'list': ['PLJ85jmdKU96JIZjV6Rpbc1ZidaClDdnpF'],
+}
+```
+
+Tendo esse `dict`, pegamos o primeiro valor que está dentro da chave `list`. Que, finalmente, é o identificador da nossa playlist!!!!
+
+<div style="text-align:center">
+    <figure>
+        <img width="50%" src="https://media.giphy.com/media/jVStxzak9yk2Q/giphy.gif" alt="Its about damn time">
+        <figcaption>FINALMENTE!</figcaption>
+    </figure>
+</div>
+
+
+Agora que nós temos o identificador da playlist, podemos pedir as informações sobre ela. E como fazemos isso? Assim:
+
+```python
+def get_playlist_information(playlist_id, page_token=None):
+    page_token_parameter = f'?pageToken={page_token}' if page_token else ''
+
+    api_url = (
+        'https://www.googleapis.com/youtube/v3/playlistItems?'
+        'part=snippet&maxResults=50'
+        f'&playlistId={playlist_id}&key={YOUTUBE_KEY}{page_token_parameter}'
+    )
+
+    return requests.get(api_url).json()
+```
+
+A variável `api_url` é a url que iremos montar para pedir as informações ao serviço do google. Seguindo a [documentação da API](https://developers.google.com/youtube/v3/docs/playlistItems/list) (onde pode ser visto mais detalhes cada um dos paramêtros), mandamos 4 paramêtros, são eles:
+- `part`: Nesse nós informamos qual parte dos dados nós queremos. Utilizei o `snippet` que é o que traz mais informações sobre cada um dos vídeos.
+- `maxResults`: Esse aqui diz o máximo de vídeos que ele deve nos informar, o valor padrão é 5 e o máximo é 50. O motivo disso é que as API's, a fim de garantir o serviço, elas utilizam uma técnica chamada paginação, isso é dividir os recursos em várias páginas para que não sobrecarregue o servidor, nem demore muito para retornar o resultado. Aqui coloquei 50 porque não importa muito pra mim quanto vai demorar, eu quero a lista de todos os vídeos das playlists mesmo.
+- `key`: Essa é tipo uma senha, tem esse vários posts na internet explicando como conseguir, tipo [esse](https://blog.difluir.com/2016/10/como-criar-uma-chave-de-api-para-youtube/). Caso não consiga, me chama!
+- `pageToken`: Esse aqui nós vamos utilizar caso a playlist tenha mais de 50 vídeos, daí não usamos ele na primeira chamada e o serviço nos retorna os 50 primeiros e o `pageToken` da próxima página (a página que vai ter do vídeo 51º até o 100º).
+
+A primeira linha da função verifica se estamos fazendo a primeira chamada (sem `pageToken`) ou se estamos buscando alguma página em específico e monta o paramêtro que tem que ser enviado para conseguirmos a página desejada.
+
+Agora nós temos a informação ([^4]) dos vídeos que fazem parte da playlist e para montarmos a nossa playlist nós precisamos extrair o identificador de cada um dos vídeos desse montante de dados. Para isso, a função a seguir monta uma lista com os identificadores dos vídeos que o serviço nos retornou removendo os vídeos que são privados ([^5]).
+
+```python
+def extract_video_ids_from_response(response):
+    return [
+        video['snippet']['resourceId']['videoId']
+        for video in response['items']
+        if video['snippet']['title'] != 'Private video'
+    ]
+```
+
+Finalmente temos os identificadores dos vídeos que compõem a playlist. Fazemos isso com a seguinte função:
+
+```python
+def build_playlist_url(video_ids):
+    video_ids_reversed = video_ids[::-1]
+    new_playlist_url = (
+        f"https://www.youtube.com/watch_videos?video_ids={','.join(video_ids_reversed)}"
+    )
+    return new_playlist_url
+```
+
+Primeiro invertemos a lista de ids, `video_ids[::-1]`. Depois montamos a url `https://www.youtube.com/watch_videos` com o paramêtro `video_ids` sendo os identificadores dos vídeos separados por vírgula.
+
+
+## Conclusão
+
+Agora podemos maratonar Guetonomia tranquilamente na ordem cronológica, [clicando aqui](https://www.youtube.com/watch_videos?video_ids=3SEh4p1F39M,-kTQkNM7qt8,qY22Oterog4,alN51X5HUPk,bg9eCFqj-G8,Eb7835lnf_I,B314Jg6GygY,IUL-yASGlU8,gmQEczeLifU,9kaT4m8e6M0,no8HsSJ_0CQ,xZ6-Nj4tacU,XX5t8qKV79U,ucHKIiZpz0M,6v9mOVxRL3c,fLt0Zon4UC8,VQThJm1yBS0,lFmkZXHQsVg,kpCCZCXhzCY,s3TZqypvvH8,S5P7HJ3ZZck,rzKTvWlX_ns,K_7QtcBdU8Q,4QpXhe_SvyI,R8yBRs-gPZU,UVlAYHsIB2g,SrqImCs9h6s) ou copiando esse modesto link:
+
+```
+https://www.youtube.com/watch_videos?video_ids=3SEh4p1F39M,-kTQkNM7qt8,qY22Oterog4,alN51X5HUPk,bg9eCFqj-G8,Eb7835lnf_I,B314Jg6GygY,IUL-yASGlU8,gmQEczeLifU,9kaT4m8e6M0,no8HsSJ_0CQ,xZ6-Nj4tacU,XX5t8qKV79U,ucHKIiZpz0M,6v9mOVxRL3c,fLt0Zon4UC8,VQThJm1yBS0,lFmkZXHQsVg,kpCCZCXhzCY,s3TZqypvvH8,S5P7HJ3ZZck,rzKTvWlX_ns,K_7QtcBdU8Q,4QpXhe_SvyI,R8yBRs-gPZU,UVlAYHsIB2g,SrqImCs9h6s
+```
+
+<div style="text-align:center">
+    <figure>
+        <img width="50%" src="https://media.giphy.com/media/l46CkATpdyLwLI7vi/giphy.gif" alt="Criança com chapéu de festa impressionada e sorrindo">
+        <figcaption>UHUUUL!</figcaption>
+    </figure>
+</div>
+
+
+Espero ter ajudado! O código pode ser visto [aqui](https://github.com/giovanisleite/reverse-youtube-playlist).
+
+## Referências
+
+- [Quebradev](https://quebradev.com.br/a-resistencia-da-quebrada/)
+- [Guetonomia](https://www.youtube.com/watch?v=-kTQkNM7qt8)
+- [API do youtube](https://developers.google.com/youtube/v3/docs/playlistItems)
+- [O que é string, dict e tal? Tipos no python](http://excript.com/python/tipos-de-dados-python.html)
+
+## Notas
+
+[^1]: [Link](https://www.youtube.com/watch?v=pM68J2JA72U) para o vídeo do Fernando Masanori explicando e fazendo raspagem de dados com python.
+
+[^2]: Para fazer uso desse serviço você precisa de um código chave, é tipo uma senha. Tem vários posts explicando como fazer, tipo [esse](https://blog.difluir.com/2016/10/como-criar-uma-chave-de-api-para-youtube/), mas se não conseguir, pode me procurar, nós damos um jeito!
+
+[^3]: Achei esse [link](https://domains.google/intl/pt-BR_ALL/learn/the-difference-between-a-url-domain-website-more.html#/) do google fazendo uma explicação dos nomes e [nesse texto](https://rockcontent.com/blog/url/) da rockcontent, mais especificamente no tópico "Entenda a estrutura básica de uma URL", fala sobre cada uma das partes que compõem uma url.
+
+[^4]: [Essa parte da documentação](https://developers.google.com/youtube/v3/docs/playlistItems#resource) mostra o formato dos dados sobre cada um dos vídeos.
+
+[^5]: A API não retorna muitos dados sobre os vídeos privados, obviamente. Eles aparecem na lista, mas não dá para acessarmos eles, então removi da lista.
