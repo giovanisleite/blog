@@ -5,7 +5,7 @@ description   : "Escrever umas coisas aí..."
 keywords      : "developer, python, react, rails, opensource, data, productivity"
 url           : https://giovanisleite.github.io
 baseurl       : "" # apply repo name like "/myproject" if used under gh-pages branch, else (under master branch) just leave empty/blank
-cover         : "https://images.unsplash.com/photo-1485075792961-9ea033ad04fc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1334&q=80" # image uri like logo/cover image for site seo
+cover         : "https://i.ibb.co/qpjYjJS/blog.jpg" # image uri like logo/cover image for site seo
 
 google_analytics  : UA-138722564-1
 twitter_username  : "queleabraco"
