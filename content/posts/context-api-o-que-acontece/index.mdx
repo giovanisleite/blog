@@ -1,0 +1,59 @@
+---
+title: "React ContextAPI: Um consumer, dois providers. O que acontece?"
+date: 2020-05-14
+slug: "/context-api-o-que-acontece"
+tags:
+ - react
+ - context-api
+---
+
+### Como funciona
+
+ContextAPI[^1] é um recurso bem útil do React que facilita o compartilhamento de um estado entre vários componentes sem que você tenha que passar as props por cada um deles. Com os hooks[^2] ficou ainda mais fácil usar esse recurso.
+
+Para cada contexto, você tem Providers e Consumers. O Provider mantém o estado que você quer que seja compartilhado em sua `prop` `value`. Os Consumers são aqueles que vão acessar o estado mantido por esse Provider.
+
+Uma aplicação comum disso é para mantermos salvo o usuário que está atualmente logado no sistema. Assim, temos um provider que mantém em seu estado os dados desse usuário (ou nada, caso não tenha nenhum usuário logado). Qualquer página da nossa aplicação pode ter acesso a esse estado desde que ela esteja abaixo do Provider na árvore de renderização, podendo assim autorizar ou não usuários a acessarem determinados recursos.
+
+### Mas e se colocarmos mais de um Provider? Explode?
+
+O uso mais comum é termos um Provider porque é interessante termos um lugar só para consultarmos caso precisemos desse estado em específico. Mas o que acontece se tiver mais de um?
+
+<iframe
+     src="https://codesandbox.io/embed/nostalgic-dew-piyhl?autoresize=1&fontsize=14&theme=dark&view=preview"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="nostalgic-dew-piyhl"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+
+Não explode e não dá erros bizarros, dois pontos positivos e contando. Para entender o que aconteceu temos que prestar atenção nessa parte aqui:
+
+```jsx
+<OurProvider value="Hello World!">
+    <OurProvider value="Olá mundo!">
+        <OurConsumer />
+    </OurProvider>
+</OurProvider>
+```
+
+Na nossa árvore de renderização, O `OurProvider` com `value="Hello World"` é o primeiro componente, portanto, a raiz. O componente que vem após ele é um `OurProvider` com um `value` diferente. Por fim, nosso `OurConsumer`.
+
+Quando esse último tenta acessar o valor do nosso contexto, é buscado o `Provider` mais próximo dele na árvore de renderização. Ao sair em busca do Provider, encontramos nosso `OurProvider` com `value="Olá mundo!"` e esse valor é retornado.
+
+<figure style="text-align: center;">
+    <img src="https://media.giphy.com/media/4JVTF9zR9BicshFAb7/source.gif" width="480" height="345" alt="Man doing calculus"></img>
+    <figcaption>Árvore, raiz em cima... - <a href="https://giphy.com/gifs/achievementhunter-rooster-teeth-achievement-hunter-off-topic-ah-4JVTF9zR9BicshFAb7">via GIPHY</a></figcaption>
+</figure>
+
+Esse mecanismo - que já vem pronto! - facilita quando, por exemplo, queremos que um módulo acesse um valor diferente do restante da aplicação. Isso é comum no caso dos temas. Quando utilizamos uma biblioteca como material-ui[^3], podemos configurar um tema com, por exemplo, as cores que queremos que nosso App use. Caso uma parte do sistema tenha um design diferente, com outro grupo de cores, podemos colocar um segundo Provider com esse tema especial em volta desse módulo. Assim, mantemos todos os outros módulos do *App* com as cores do tema principal e apenas esse módulo com as cores do tema especial.
+
+Apesar de usar essa funcionalidade com frequência, ao utilizar o mecanismo através de outras bibliotecas é difícil saber o que foi facilitado pela biblioteca e o que já está pronto no próprio React. Esse teste é fruto dessa dúvida.
+
+### Bibliografia
+
+[^1]: [ContextAPI](https://pt-br.reactjs.org/docs/context.html)
+
+[^2]: [useContext](https://pt-br.reactjs.org/docs/hooks-reference.html#usecontext)
+
+[^3]: [MaterialUI](https://material-ui.com/pt/)
