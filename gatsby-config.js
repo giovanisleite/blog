@@ -11,7 +11,7 @@ module.exports = {
     // Can be used for e.g. JSONLD
     siteHeadline: `Giovani - Aprendendo e fazendo coisas`,
     // Will be used to generate absolute URLs for og:image etc.
-    siteUrl: `https://giovanisleite.github.io`,
+    siteUrl: `https://giovanisleite.dev`,
     // Used for SEO
     siteDescription: `Um lugar na web para compartilhar o que eu estudo, aprendo ou tento...`,
     // Will be set on the <html /> tag
