@@ -4,6 +4,18 @@ date: 2021-03-17
 slug: "/css-for-js-developers-josh-comeau"
 ---
 
+<style>
+.mobile-only {
+    color: black;
+}
+
+@media (max-width: 959px) {
+  .mobile-only {
+    color: red;
+  }
+}
+</style>
+
 Inspirado por um colega de curso, [Eric howeyh](https://www.erichowey.dev/writing/notes-from-css-for-js-course/), resolvi montar esse vaso digital (?) com minhas notas sobre o curso. Eu já tinha visto a [Maggie Appleton](https://maggieappleton.com/garden-history) comentar sobre o conceito de *Digital Garden* ([1](https://joelhooks.com/digital-garden) [2](https://tomcritchlow.com/2019/02/17/building-digital-garden/)). Achei interessante a ideia e quis fazer o meu também!
 
 
@@ -15,6 +27,14 @@ Já tinha visto alguns posts dele, o [site dele](https://www.joshwcomeau.com/) s
 
 
 ### Módulo 0
+
+Recapitulando alguns pontos chave do CSS e necessários para seguir com o curso (talvez preencher alguns gaps).
+
+Uma regra CSS é formada por um seletor e declarações. O seletor pode ser uma tag HTML, uma classe CSS, um ID, entre outros tipos de seletores, isso dita em quais elementos as declarações serão aplicadas. Uma declaração é formada por uma propriedade, como *color*, por exemplo, e um valor, *red*, seguindo o exemplo de cor. Há diversas propriedades, bem como valores válidos para essas propriedades. Em algumas delas, o valor pode ser seguido de uma unidade de medida, como px (pixels), %, em. Por exemplo: `margin: 5px` ou `width: 85%`.
+
+Media-Queries são uma espécie de [if statement](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/if...else) do CSS. É possível utilizar com várias propriedades, as mais comuns são *min-width*, *max-width*, *min-height*, *max-height*, *width* e *height*. Assim, utilizando algumas dessas propriedades, é possível condicional algumas regras a um certo tamanho de tela. Por exemplo, <span className=".mobile-only">esse texto estará vermelho em telas com largura menor que 960px</span>
+
+
 ### Módulo 1
 ### Módulo 2
 ### Módulo 3
