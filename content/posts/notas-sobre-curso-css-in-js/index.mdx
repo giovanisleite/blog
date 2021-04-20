@@ -23,8 +23,8 @@ Recapitulando alguns pontos chave do CSS e necessários para seguir com o curso 
 
 Uma regra CSS é formada por um seletor e declarações. O seletor pode ser uma tag HTML, uma classe CSS, um ID, entre outros tipos de seletores, isso dita em quais elementos as declarações serão aplicadas. Uma declaração é formada por uma propriedade, como *color*, por exemplo, e um valor, *red*, seguindo o exemplo de cor. Há diversas propriedades, bem como valores válidos para essas propriedades. Em algumas delas, o valor pode ser seguido de uma unidade de medida, como px (pixels), %, em. Por exemplo: `margin: 5px` ou `width: 85%`.
 
-Media-Queries são uma espécie de [if statement](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/if...else) do CSS. É possível utilizar com várias propriedades, as mais comuns são *min-width*, *max-width*, *min-height*, *max-height*, *width* e *height*. Assim, utilizando algumas dessas propriedades, é possível condicional algumas regras a um certo tamanho de tela. Por exemplo, <Text sx={{'@media screen and (max-width: 959px)': {color: 'red'}}}> esse texto estará vermelho em telas com largura menor que 960px</Text>.
-<div style={{textAlign: 'center', }}>
+Media-Queries são uma espécie de [if statement](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/if...else) do CSS. É possível utilizar com várias propriedades, as mais comuns são *min-width*, *max-width*, *min-height*, *max-height*, *width* e *height*. Assim, utilizando algumas dessas propriedades, é possível condicional algumas regras a um certo tamanho de tela. Por exemplo, <Text sx={{'@media screen and (max-width: 959px)': {color: 'red'}}}> esse texto estará vermelho em telas com largura menor que 960px.</Text>
+<div style={{textAlign: 'center'}}>
   <img src={gif} alt="Uma gravação da tela do blog com esse post diminuindo e aumentando a largura da tela no intervalo 959px até 961px para mostrar que ao ultrapassar esse limite, o texto muda de cor" width={600} style={{border: 'solid 3px white'}}/>
 </div>
 
