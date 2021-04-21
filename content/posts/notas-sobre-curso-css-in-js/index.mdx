@@ -24,9 +24,26 @@ Recapitulando alguns pontos chave do CSS e necessários para seguir com o curso 
 Uma regra CSS é formada por um seletor e declarações. O seletor pode ser uma tag HTML, uma classe CSS, um ID, entre outros tipos de seletores, isso dita em quais elementos as declarações serão aplicadas. Uma declaração é formada por uma propriedade, como *color*, por exemplo, e um valor, *red*, seguindo o exemplo de cor. Há diversas propriedades, bem como valores válidos para essas propriedades. Em algumas delas, o valor pode ser seguido de uma unidade de medida, como px (pixels), %, em. Por exemplo: `margin: 5px` ou `width: 85%`.
 
 Media-Queries são uma espécie de [if statement](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/if...else) do CSS. É possível utilizar com várias propriedades, as mais comuns são *min-width*, *max-width*, *min-height*, *max-height*, *width* e *height*. Assim, utilizando algumas dessas propriedades, é possível condicional algumas regras a um certo tamanho de tela. Por exemplo, <Text sx={{'@media screen and (max-width: 959px)': {color: 'red'}}}> esse texto estará vermelho em telas com largura menor que 960px.</Text>
+
 <div style={{textAlign: 'center'}}>
   <img src={gif} alt="Uma gravação da tela do blog com esse post diminuindo e aumentando a largura da tela no intervalo 959px até 961px para mostrar que ao ultrapassar esse limite, o texto muda de cor" width={600} style={{border: 'solid 3px white'}}/>
 </div>
+
+Existem alguns tipos de seletores, como por exemplo: ID, classe CSS e tag HTML. Esses seletores podem ser usados com modificadores, conhecidos como [pseudo-classes](https://developer.mozilla.org/pt-BR/docs/Web/CSS/Pseudo-classes), combinados com outros seletores ou utilizados em grupo quando queremos aplicar algumas declarações idênticas a mais de um seletor.
+
+Essas pseudo-classes alteram o seletor para que a regra seja aplicada apenas quando o elemento se encontra em determinado estado. Um exemplo é a pseudo-classe *:hover*. Quando utilizamos esse modificador, o estilo só é aplicado quando o elemento está sendo *hovered* (O mouse passando por cima dele). São várias as [pseudo-classes](https://developer.mozilla.org/pt-BR/docs/Web/CSS/Pseudo-classes), uma delas que merece destaque é a *:focus*. Essa pseudo-classe é bastante importante principalmente em termos de acessibilidade. Algumas vezes, as bordas que são adicionadas, por padrão, aos elementos quando focados fogem da identidade visual do site está sendo desenvolvido, e, por isso, as pessoas acabam removendo-as sem oferecer uma opção. Sendo que esse é um dos estilos essenciais para quem navega pelo site utilizando apenas o teclado ou voz, por exemplo.
+
+A combinação de seletores é bem comum e facilita situações que queremos, por exemplo, selecionar apenas os links que estão dentro do menu de navegação: `nav a`. Mas pode ser que dentro desse menu tem mútiplos níveis e queremos dar um destaque especial para os links que estão no primeiro nível da tag *nav*, assim poderíamos utilizar algo como: `nav > a`.
+
+Quando queremos utilizar as mesmas declarações para diferentes seletores, podemos usar a vírgula entre os seletores. Exemplo:
+```
+button, a {
+  color: hsl(200deg, 100%, 50%)
+}
+```
+
+Assim, os textos dentro dos botões e dos links terão essa cor <div style={{backgroundColor: 'hsl(200deg, 100%, 50%)', height: 20, width: 20, marginBottom: -3, display: 'inline-block'}} />.
+
 
 ### Módulo 1
 ### Módulo 2
