@@ -30,6 +30,8 @@ Com o passar do tempo, nós fizemos algumas pequenas mudanças na API e nós des
 > - média: talvez você encontre alguns bugs, perca confiança, ou tenha trabalho extra desnecessariamente
 > - alta: escute esse conselho! Você provavelmente está perdendo confiança ou terá testes problemáticos
 
+<br/>
+
 ## Não usar os plugins para ESLint da Testing Library
 
 > Importância: média
@@ -40,6 +42,8 @@ Se você quer evitar vários desses erros comuns, então os plugins oficiais par
 - [eslint-plugin-jest-dom](https://github.com/testing-library/eslint-plugin-jest-dom)
 
 **Conselho: Instale e use os plugins para ESLint data Testing Library**
+
+<br />
 
 ## Usar `wrapper` como nome para a variável que recebe o retorno de `render`
 
@@ -59,6 +63,8 @@ O nome `wrapper` é velharia herdada do `enzyme` e nós não precisamos disso aq
 
 **Conselho: desestruture o que você precisar do retorno do `render` ou chame de `view`.**
 
+<br />
+
 ## Usar `cleanup`
 
 > Importância: média
@@ -77,6 +83,8 @@ Já faz bastante tempo que `cleanup` acontece automaticamente (com suporte na ma
 [Saiba mais](https://testing-library.com/docs/react-testing-library/api#cleanup).
 
 **Conselho: não use `cleanup`**
+
+<br />
 
 ## Não usar screen
 
@@ -106,7 +114,9 @@ Você também pode usar [`screen.debug`](https://testing-library.com/docs/dom-te
 
 **Conselho: use `screen` para fazer as queries e usar o debug.**
 
-## Using the wrong assertion
+<br />
+
+## Usar a asserção (assertion) errada
 
 > Importância: alta
 
@@ -115,7 +125,7 @@ const button = screen.getByRole('button', {name: /disabled button/i})
 
 // ❌
 expect(button.disabled).toBe(true)
-// error message:
+// Mensagem de erro:
 //  expect(received).toBe(expected) // Object.is equality
 //
 //  Expected: true
@@ -123,20 +133,19 @@ expect(button.disabled).toBe(true)
 
 // ✅
 expect(button).toBeDisabled()
-// error message:
+// Mensagem de erro:
 //   Received element is not disabled:
 //     <button />
 ```
 
-That `toBeDisabled` assertion comes from
-[`jest-dom`](https://github.com/testing-library/jest-dom). It's strongly
-recommended to use `jest-dom` because the error messages you get with it are
-much better.
+Aquela asserção `toBeDisabled` vem da [`jest-dom`](https://github.com/testing-library/jest-dom). É fortemente recomendado o uso da `jest-dom` pois as mensagens de erro são muito melhores.
 
-**Conselho: install and use
+**Conselho: instale e use
+
+<br />
 [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom#tobedisabled)**
 
-## Wrapping things in `act` unnecessarily
+## Colocando `act` em volta das coisas desnecessariamente
 
 > Importância: média
 
@@ -157,19 +166,13 @@ const input = screen.getByRole('textbox', {name: /choose a fruit/i})
 fireEvent.keyDown(input, {key: 'ArrowDown'})
 ```
 
-I see people wrapping things in `act` like this because they see these "act"
-warnings all the time and are just desperately trying anything they can to get
-them to go away, but what they don't know is that `render` and `fireEvent` are
-already wrapped in `act`! So those are doing nothing useful.
+Eu vejo pessoas colocando `act` em volta de coisas como essas porque elas veem esses warnings com `act` o tempo todo e estão apenas tentando desesperadamente fazer com que eles desapareçam, mas o que eles não sabem é que `render` e `fireEvent` já estão envolvidos por `act`! Então aqueles ali que elas colocam em volta não está fazendo nada útil.
 
-Most of the time, if you're seeing an `act` warning, it's not just something to
-be silenced, but it's actually telling you that something unexpected is
-happening in your test. You can learn more about this from my blog post (and
-videos):
-[Fix the "not wrapped in act(...)" warning](https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning).
+Na maioria das vezes, se você está vendo um warning com `act`, não é algo pra só ignorar ou tentar fazer desaparecer, na verdade isso está te avisando que algo inesperado está acontecendo com seu teste. Você pode aprender mais sobre isso com o meu blog post (e vídeos): [Corrija o warning "not wrapped in act(...)"](https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning).
 
-**Conselho: Learn when `act` is necessary and don't wrap things in `act`
-unnecessarily.**
+**Conselho: Aprenda quando `act` é necessário e não coloque `act` em volta das coisas desnecessariamente.**
+
+<br />
 
 ## Using the wrong query
 
@@ -324,6 +327,8 @@ the role of button. That's an implicit role, which leads us perfectly into our
 next one...
 
 **Conselho: Read and follow the recommendations on
+
+<br />
 [The "Which Query Should I Use" Guide](https://testing-library.com/docs/guide-which-query).**
 
 ## Adding `aria-`, `role`, and other accessibility attributes incorrectly
@@ -352,6 +357,8 @@ accessibly or follow the WAI-ARIA practices. They often have
 > `type` attribute!
 
 **Conselho: Avoid adding unnecessary or incorrect accessibility attributes.**
+
+<br />
 
 ## Not using `@testing-library/user-event`
 
@@ -383,6 +390,8 @@ use it's utilities over `fireEvent`.
 
 **Conselho: Use `@testing-library/user-event` over `fireEvent` where possible.**
 
+<br />
+
 ## Using `query*` variants for _anything_ except checking for non-existence
 
 > Importância: alta
@@ -402,6 +411,8 @@ found to match the query (it returns `null` if no element is found). The _only_
 reason this is useful is to verify that an element is not rendered to the page.
 
 **Conselho: Only use the `query*` variants for asserting that an element cannot be
+
+<br />
 found.**
 
 ## Using `waitFor` to wait for elements that can be queried with `find*`
@@ -423,6 +434,8 @@ under the hood), but the second is simpler and the error message you get will be
 better.
 
 **Conselho: use `find*` any time you want to query for something that may not be
+
+<br />
 available right away.**
 
 ## Passing an empty callback to `waitFor`
@@ -448,6 +461,8 @@ async logic.
 
 **Conselho: wait for a specific assertion inside `waitFor`.**
 
+<br />
+
 ## Having multiple assertions in a single `waitFor` callback
 
 > Importância: baixa
@@ -471,6 +486,8 @@ for the UI to settle to the state we want to assert on, and also fail faster if
 one of the assertions do end up failing.
 
 **Conselho: only put one assertion in a callback.**
+
+<br />
 
 ## Performing side-effects in `waitFor`
 
@@ -501,6 +518,8 @@ do want to use a snapshot assertion, then first wait for a specific assertion,
 and then after that you can take your snapshot.
 
 **Conselho: put side-effects outside `waitFor` callbacks and reserve the callback
+
+<br />
 for assertions only.**
 
 ## Using `get*` variants as assertions
@@ -528,6 +547,8 @@ readers of the code that it's not just an old query hanging around after a
 refactor but that I'm explicitly asserting that it exists.
 
 **Conselho: If you want to assert that something exists, make that assertion
+
+<br />
 explicit.**
 
 ## Conclusion
