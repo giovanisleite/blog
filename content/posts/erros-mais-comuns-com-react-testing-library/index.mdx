@@ -19,42 +19,31 @@ banner: './images/banner.jpg'
 
 [Artigo original em Inglês](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
 
-Hi there 👋 I created React Testing Library because I wasn't satisfied with the
-testing landscape at the time. It expanded to DOM Testing Library and now we
-have Testing Library implementations (wrappers) for every popular JavaScript
-framework and testing tool that targets the DOM (and even some that don't).
+Olá 👋 Eu criei a biblioteca React Testing porque eu não estava satisfeito com o cenário de testes naquele momento. Ela se expandiu para a DOM Testing Library e agora nós temos implementações da Testing Library (wrappers) para todos frameworks JavaScript populares e ferramenta de teste que focam no DOM (e até algumas que não).
 
-As time has gone on, we've made some small changes to the API and we've
-discovered suboptimal patterns. Despite our efforts to document the "better way"
-to use the utilities we provide, I still see blog posts and tests written
-following these suboptimal patterns and I'd like to go through some of these,
-explain why they're not great and how you can improve your tests to avoid these
-pitfalls.
 
-> Note: I label each of these by their importance:
+Com o passar do tempo, nós fizemos algumas pequenas mudanças na API e nós descobrimos alguns padrões subótimos. Apesar dos nossos esforços para documentar a "melhor forma" de usar as ferramentas que nós fornecemos, eu ainda vejo blog posts e testes escritos seguindo esses padrões subótimos e eu gostaria de passar por cada um deles, comentar o porquê de não serem ótimos e como você pode melhorar seus testes para evitar essas armadilhas.
+
+> Nota: Eu clasifiquei cada um desses pela importância:
 >
-> - low: this is mostly just my opinion, feel free to ignore and you'll probably
->   be fine.
-> - medium: you might experience bugs, lose confidence, or be doing work you
->   don't need to
-> - high: definitely listen to this advice! You're likely missing confidence or
->   will have problematic tests
+> - baixa: isso é majoritariamente opinião minha, sinta-se a vontade para ignorar e você provavelmente não vai ter problemas
+> - média: talvez você encontre alguns bugs, perca confiança, ou tenha trabalho extra desnecessariamente
+> - alta: escute esse conselho! Você provavelmente está perdendo confiança ou terá testes problemáticos
 
-## Not using Testing Library ESLint plugins
+## Não usar os plugins para ESLint da Testing Library
 
-> Importance: medium
+> Importância: média
 
-If you'd like to avoid several of these common mistakes, then the official
-ESLint plugins could help out a lot:
+Se você quer evitar vários desses erros comuns, então os plugins oficiais para ESLint podem te ajudar bastante:
 
 - [eslint-plugin-testing-library](https://github.com/testing-library/eslint-plugin-testing-library)
 - [eslint-plugin-jest-dom](https://github.com/testing-library/eslint-plugin-jest-dom)
 
-**Advice: Install and use the ESLint plugin for Testing Library.**
+**Conselho: Instale e use os plugins para ESLint data Testing Library**
 
-## Using `wrapper` as the variable name for the return value from `render`
+## Usar `wrapper` como nome para a variável que recebe o retorno de `render`
 
-> Importance: low
+> Importância: baixa
 
 ```javascript
 // ❌
@@ -66,16 +55,13 @@ const {rerender} = render(<Example prop="1" />)
 rerender(<Example prop="2" />)
 ```
 
-The name `wrapper` is old cruft from `enzyme` and we don't need that here. The
-return value from `render` is not "wrapping" anything. It's simply a collection
-of utilities that (thanks to the next thing) you should actually not often need
-anyway.
+O nome `wrapper` é velharia herdada do `enzyme` e nós não precisamos disso aqui. O valor retornado de `render` não está "wrapping" nada. É simplesmente uma coleção de utilidades que (graças ao próximo item) você realmente não deveria precisar com frequência de qualquer forma.
 
-**Advice: destructure what you need from `render` or call it `view`.**
+**Conselho: desestruture o que você precisar do retorno do `render` ou chame de `view`.**
 
-## Using `cleanup`
+## Usar `cleanup`
 
-> Importance: medium
+> Importância: média
 
 ```javascript
 // ❌
@@ -87,15 +73,14 @@ afterEach(cleanup)
 import {render, screen} from '@testing-library/react'
 ```
 
-For a long time now `cleanup` happens automatically (supported for most major
-testing frameworks) and you no longer need to worry about it.
-[Learn more](https://testing-library.com/docs/react-testing-library/api#cleanup).
+Já faz bastante tempo que `cleanup` acontece automaticamente (com suporte na maioria dos grandes frameworks de teste) e você não precisa se preocupar com isso.
+[Saiba mais](https://testing-library.com/docs/react-testing-library/api#cleanup).
 
-**Advice: don't use `cleanup`**
+**Conselho: não use `cleanup`**
 
-## Not using `screen`
+## Não usar screen
 
-> Importance: medium
+> Importância: média
 
 ```javascript
 // ❌
@@ -107,33 +92,23 @@ render(<Example />)
 const errorMessageNode = screen.getByRole('alert')
 ```
 
-`screen`
-[was added in DOM Testing Library v6.11.0](https://github.com/testing-library/dom-testing-library/releases/tag/v6.11.0)
-(which means you should have access to it in `@testing-library/react@>=9`). It
-comes from the same import statement you get `render` from:
+`screen` [foi adicionado na versão v6.11.0 da DOM Testing Library](https://github.com/testing-library/dom-testing-library/releases/tag/v6.11.0) (o que significa que você deveria ter acesso a ela em qualquer ambiente com `@testing-library/react@>=9`). Ela vem do mesmo import que você recebe `render`:
 
 ```javascript
 import {render, screen} from '@testing-library/react'
 ```
 
-The benefit of using `screen` is you no longer need to keep the `render` call
-destructure up-to-date as you add/remove the queries you need. You only need to
-type `screen.` and let your editor's magic autocomplete take care of the rest.
+O benefício de utilizar `screen` é que você não precisa ficar mudando o que você recebe do `render` conforme queira adicionar/remover as queries que você precisa. Você só precisa digitar `screen.` e deixar a mágica do autocomplete do seu editor cuidar do resto.
 
-The only exception to this is if you're setting the `container` or `baseElement`
-which you probably should avoid doing (I honestly can't think of a legitimate
-use case for those options anymore and they only exist for historical reasons at
-this point).
+A única exceção para isso é se você está usando o `container` ou `baseElement` que você provavelmente deveria evitar (eu honestamente não consigo mais pensar em um caso de uso legítimo para essas opções e elas só existem por razões históricas neste momento)
 
-You can also call
-[`screen.debug`](https://testing-library.com/docs/dom-testing-library/api-queries#screendebug)
-instead of `debug`
+Você também pode usar [`screen.debug`](https://testing-library.com/docs/dom-testing-library/api-queries#screendebug) ao invés de `debug`
 
-**Advice: use `screen` for querying and debugging.**
+**Conselho: use `screen` para fazer as queries e usar o debug.**
 
 ## Using the wrong assertion
 
-> Importance: high
+> Importância: alta
 
 ```javascript
 const button = screen.getByRole('button', {name: /disabled button/i})
@@ -158,12 +133,12 @@ That `toBeDisabled` assertion comes from
 recommended to use `jest-dom` because the error messages you get with it are
 much better.
 
-**Advice: install and use
+**Conselho: install and use
 [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom#tobedisabled)**
 
 ## Wrapping things in `act` unnecessarily
 
-> Importance: medium
+> Importância: média
 
 ```javascript
 // ❌
@@ -193,12 +168,12 @@ happening in your test. You can learn more about this from my blog post (and
 videos):
 [Fix the "not wrapped in act(...)" warning](https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning).
 
-**Advice: Learn when `act` is necessary and don't wrap things in `act`
+**Conselho: Learn when `act` is necessary and don't wrap things in `act`
 unnecessarily.**
 
 ## Using the wrong query
 
-> Importance: high
+> Importância: alta
 
 ```javascript
 // ❌
@@ -348,12 +323,12 @@ Notice that we didn't have to add the `role=button` to our button for it to have
 the role of button. That's an implicit role, which leads us perfectly into our
 next one...
 
-**Advice: Read and follow the recommendations on
+**Conselho: Read and follow the recommendations on
 [The "Which Query Should I Use" Guide](https://testing-library.com/docs/guide-which-query).**
 
 ## Adding `aria-`, `role`, and other accessibility attributes incorrectly
 
-> Importance: high
+> Importância: alta
 
 ```javascript
 // ❌
@@ -376,11 +351,11 @@ accessibly or follow the WAI-ARIA practices. They often have
 > Note: to make `input`s accessible via a "role" you'll want to specify the
 > `type` attribute!
 
-**Advice: Avoid adding unnecessary or incorrect accessibility attributes.**
+**Conselho: Avoid adding unnecessary or incorrect accessibility attributes.**
 
 ## Not using `@testing-library/user-event`
 
-> Importance: medium
+> Importância: média
 
 ```javascript
 // ❌
@@ -406,11 +381,11 @@ baked-into `@testing-library/dom` (though it may be at some point in the
 future). However, I'm confident enough in it to recommend you give it a look and
 use it's utilities over `fireEvent`.
 
-**Advice: Use `@testing-library/user-event` over `fireEvent` where possible.**
+**Conselho: Use `@testing-library/user-event` over `fireEvent` where possible.**
 
 ## Using `query*` variants for _anything_ except checking for non-existence
 
-> Importance: high
+> Importância: alta
 
 ```javascript
 // ❌
@@ -426,12 +401,12 @@ have a function you can call which does not throw an error if no element is
 found to match the query (it returns `null` if no element is found). The _only_
 reason this is useful is to verify that an element is not rendered to the page.
 
-**Advice: Only use the `query*` variants for asserting that an element cannot be
+**Conselho: Only use the `query*` variants for asserting that an element cannot be
 found.**
 
 ## Using `waitFor` to wait for elements that can be queried with `find*`
 
-> Importance: high
+> Importância: alta
 
 ```javascript
 // ❌
@@ -447,12 +422,12 @@ Those two bits of code are basically equivalent (`find*` queries use `waitFor`
 under the hood), but the second is simpler and the error message you get will be
 better.
 
-**Advice: use `find*` any time you want to query for something that may not be
+**Conselho: use `find*` any time you want to query for something that may not be
 available right away.**
 
 ## Passing an empty callback to `waitFor`
 
-> Importance: high
+> Importância: alta
 
 ```javascript
 // ❌
@@ -471,11 +446,11 @@ for is "one tick of the event loop" thanks to the way your mocks work. But
 you'll be left with a fragile test which could easily fail if you refactor your
 async logic.
 
-**Advice: wait for a specific assertion inside `waitFor`.**
+**Conselho: wait for a specific assertion inside `waitFor`.**
 
 ## Having multiple assertions in a single `waitFor` callback
 
-> Importance: low
+> Importância: baixa
 
 ```javascript
 // ❌
@@ -495,11 +470,11 @@ see that test failure. By putting a single assertion in there, we can both wait
 for the UI to settle to the state we want to assert on, and also fail faster if
 one of the assertions do end up failing.
 
-**Advice: only put one assertion in a callback.**
+**Conselho: only put one assertion in a callback.**
 
 ## Performing side-effects in `waitFor`
 
-> Importance: high
+> Importância: alta
 
 ```javascript
 // ❌
@@ -525,12 +500,12 @@ This also means that you can't use snapshot assertions within `waitFor`. If you
 do want to use a snapshot assertion, then first wait for a specific assertion,
 and then after that you can take your snapshot.
 
-**Advice: put side-effects outside `waitFor` callbacks and reserve the callback
+**Conselho: put side-effects outside `waitFor` callbacks and reserve the callback
 for assertions only.**
 
 ## Using `get*` variants as assertions
 
-> Importance: low
+> Importância: baixa
 
 ```javascript
 // ❌
@@ -552,7 +527,7 @@ but I personally normally keep the assertion in there just to communicate to
 readers of the code that it's not just an old query hanging around after a
 refactor but that I'm explicitly asserting that it exists.
 
-**Advice: If you want to assert that something exists, make that assertion
+**Conselho: If you want to assert that something exists, make that assertion
 explicit.**
 
 ## Conclusion
