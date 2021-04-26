@@ -140,10 +140,9 @@ expect(button).toBeDisabled()
 
 Aquela asserção `toBeDisabled` vem da [`jest-dom`](https://github.com/testing-library/jest-dom). É fortemente recomendado o uso da `jest-dom` pois as mensagens de erro são muito melhores.
 
-**Conselho: instale e use
+**Conselho: instale e use [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom#tobedisabled)**
 
 <br />
-[`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom#tobedisabled)**
 
 ## Colocar `act` em volta das coisas desnecessariamente
 
@@ -336,7 +335,7 @@ Geralmente eles tem [ótimos exemplos](https://www.w3.org/TR/wai-aria-practices/
 
 <br />
 
-## Not using `@testing-library/user-event`
+## Não usar `@testing-library/user-event`
 
 > Importância: média
 
@@ -349,26 +348,25 @@ userEvent.type(input, 'hello world')
 ```
 
 [`@testing-library/user-event`](https://github.com/testing-library/user-event)
-is a package that's built on top of `fireEvent`, but it provides several methods
-that resemble the user interactions more closely. In the example above,
-`fireEvent.change` will simply trigger a single change event on the input.
-However the `type` call, will trigger `keyDown`, `keyPress`, and `keyUp` events
-for each character as well. It's much closer to the user's actual interactions.
-This has the benefit of working well with libraries that you may use which don't
-actually listen for the change event.
+é um pacote desenvolvido baseado no `fireEvent`, mas ele fornece vários métodos 
+que se assemelham mais com as interações feitas pelo usuário. No exemplo acima, 
+`fireEvent.change` vai simplesmente disparar um único evento change no input.
+Entretanto, o `userEvent.type` vai disparar eventos `keyDown`, `keyPress` e `keyUp`
+para cada um dos caracteres. É muito mais próximo a interação real do usuário.
+Isso tem o benefício de funcionar bem com bibliotecas que talvez você use que não
+reagem ao evento change e sim aos outros.
 
-We're still working on `@testing-library/user-event` to ensure that it delivers
-what it promises: firing all the same events the user would fire when performing
-a specific action. I don't think we're quite there yet and this is why it's not
-baked-into `@testing-library/dom` (though it may be at some point in the
-future). However, I'm confident enough in it to recommend you give it a look and
-use it's utilities over `fireEvent`.
+Nós ainda estamos trabalhando na `@testing-library/user-event` para garantir que entregue
+o que nós prometemos: disparar todos os mesmo eventos que o usuário dispararia ao fazer uma ação específica.
+Eu não acho que já chegamos lá e é por isso que ela não vem
+por padrão com o `@testing-library/dom` (mas pode ser que venha em algum momento no futuro).
+Apesar disso, eu estou confiante o bastante para recomendar que você dê uma olhada e use as utilidades que ela fornece ao invés de `fireEvent`.
 
-**Conselho: Use `@testing-library/user-event` over `fireEvent` where possible.**
+**Conselho: Use `@testing-library/user-event` ao invés de `fireEvent` onde for possível.**
 
 <br />
 
-## Using `query*` variants for _anything_ except checking for non-existence
+## Usar as variantes `query*` para qualquer coisa exceto checar coisas que não existem
 
 > Importância: alta
 
@@ -381,17 +379,16 @@ expect(screen.getByRole('alert')).toBeInTheDocument()
 expect(screen.queryByRole('alert')).not.toBeInTheDocument()
 ```
 
-The _only_ reason the `query*` variant of the queries is exposed is for you to
-have a function you can call which does not throw an error if no element is
-found to match the query (it returns `null` if no element is found). The _only_
-reason this is useful is to verify that an element is not rendered to the page.
+A _única_ razão que as queries do tipo `query*` são fornecidas é para você
+ter uma função que você pode chamar que não estoura um erro se nenhum elemento é encontrado
+(elas retornam `null` se nenhum elemento é encontrado). A _única_ razão para qual isso é útil é
+para verificar que um elemento não foi renderizado na página.
 
-**Conselho: Only use the `query*` variants for asserting that an element cannot be
+**Conselho: Use as variantes `query*` somente quando seu teste quer garantir que um elemento não pode ser encontrado.**
 
 <br />
-found.**
 
-## Using `waitFor` to wait for elements that can be queried with `find*`
+## Usar `waitFor` para esperar por elementos que podem ser encontrados usando a query `find*`
 
 > Importância: alta
 
@@ -405,16 +402,14 @@ const submitButton = await waitFor(() =>
 const submitButton = await screen.findByRole('button', {name: /submit/i})
 ```
 
-Those two bits of code are basically equivalent (`find*` queries use `waitFor`
-under the hood), but the second is simpler and the error message you get will be
-better.
+Esses dois trechos de código são basicamente equivalentes (as queries `find*` usam `waitFor` por debaixo dos panos),
+mas a segunda é mais simples e tem uma mensagem de erro melhor.
 
-**Conselho: use `find*` any time you want to query for something that may not be
+**Conselho: use `find*` sempre que você queira fazer uma query por algo que pode não estar disponível naquele momento.**
 
 <br />
-available right away.**
 
-## Passing an empty callback to `waitFor`
+## Passar uma função de callback vazia para `waitFor`
 
 > Importância: alta
 
@@ -429,17 +424,16 @@ await waitFor(() => expect(window.fetch).toHaveBeenCalledWith('foo'))
 expect(window.fetch).toHaveBeenCalledTimes(1)
 ```
 
-The purpose of `waitFor` is to allow you to wait for a specific thing to happen.
-If you pass an empty callback it _might_ work today because all you need to wait
-for is "one tick of the event loop" thanks to the way your mocks work. But
-you'll be left with a fragile test which could easily fail if you refactor your
-async logic.
+O propósito de `waitFor` é permitir você esperar que algo específico aconteça.
+Se você passar uma função de callback vazia pode ser que funcione hoje porque tudo que você precisa esperar
+é por "um tick do event loop" graças a forma que seus mocks funcionam. Mas você vai ficar com um teste frágil
+que pode facilmente falhar caso você refatore a lógica do trecho assíncrono do seu código.
 
-**Conselho: wait for a specific assertion inside `waitFor`.**
+**Conselho: Espere por uma asserção específica dentro do `waitFor`.**
 
 <br />
 
-## Having multiple assertions in a single `waitFor` callback
+## Ter múltiplas asserções dentro de um único callback passado para o `waitFor`
 
 > Importância: baixa
 
@@ -455,13 +449,12 @@ await waitFor(() => expect(window.fetch).toHaveBeenCalledWith('foo'))
 expect(window.fetch).toHaveBeenCalledTimes(1)
 ```
 
-Let's say that for the example above, `window.fetch` was called twice. So the
-`waitFor` call will fail, however, we'll have to wait for the timeout before we
-see that test failure. By putting a single assertion in there, we can both wait
-for the UI to settle to the state we want to assert on, and also fail faster if
-one of the assertions do end up failing.
+Digamos que no exemplo acima, `window.fetch` foi chamado duas vezes. Então, o `waitFor` vai falhar,
+entretanto, nós vamos ter que esperar pelo timeout antes que vejamos a falha do teste.
+Colocando apenas uma asserção ali, nós podemos esperar ambos, que a UI chege ao estado sob o qual nós queremos fazer os testes,
+e também falhe mais rápido se alguma das asserções acabar falhando.
 
-**Conselho: only put one assertion in a callback.**
+**Conselho: coloque apenas uma asserção dentro do callback.**
 
 <br />
 
@@ -493,10 +486,9 @@ This also means that you can't use snapshot assertions within `waitFor`. If you
 do want to use a snapshot assertion, then first wait for a specific assertion,
 and then after that you can take your snapshot.
 
-**Conselho: put side-effects outside `waitFor` callbacks and reserve the callback
+**Conselho: put side-effects outside `waitFor` callbacks and reserve the callback for assertions only.**
 
 <br />
-for assertions only.**
 
 ## Using `get*` variants as assertions
 
@@ -522,10 +514,9 @@ but I personally normally keep the assertion in there just to communicate to
 readers of the code that it's not just an old query hanging around after a
 refactor but that I'm explicitly asserting that it exists.
 
-**Conselho: If you want to assert that something exists, make that assertion
+**Conselho: If you want to assert that something exists, make that assertion explicit.**
 
 <br />
-explicit.**
 
 ## Conclusion
 
