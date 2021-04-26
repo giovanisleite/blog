@@ -458,7 +458,7 @@ e também falhe mais rápido se alguma das asserções acabar falhando.
 
 <br />
 
-## Performing side-effects in `waitFor`
+## Causar efeitos colaterais (side-effects) dentro de `waitFor`
 
 > Importância: alta
 
@@ -476,21 +476,20 @@ await waitFor(() => {
 })
 ```
 
-`waitFor` is intended for things that have a non-deterministic amount of time
-between the action you performed and the assertion passing. Because of this, the
-callback can be called (or checked for errors) a non-deterministic number of
-times and frequency (it's called both on an interval as well as when there are
-DOM mutations). So this means that your side-effect could run multiple times!
+`waitFor` é indicado para coisas que vão levar um quantidade de tempo indeterminada
+entre a ação que você executou e a assertão que você está esperando se tornar verdade. Por conta disso,
+o callback pode ser chamado (ou testado) um número indeterminado de vezes numa frequência indeterminada
+(é chamado repetidas vezes com um intervalo e tabém sempre que o DOM sofre mutações). Então, isso significa que
+o seu efeito colateral pode estar sendo executado várias vezes!
 
-This also means that you can't use snapshot assertions within `waitFor`. If you
-do want to use a snapshot assertion, then first wait for a specific assertion,
-and then after that you can take your snapshot.
+Isso também significa que você não pode usar snapshots com `waitFor`. Se você quer usar o teste por snapshot, então primeiro use o `waitFor`
+para esperar por uma asserção específica, e depois você pode testar usando o snapshot.
 
-**Conselho: put side-effects outside `waitFor` callbacks and reserve the callback for assertions only.**
+**Conselho: coloque efeitos colaterais (side-effects) fora da função de callback passada para o `waitFor` e reserve a função de callback apenas para a asserção.**
 
 <br />
 
-## Using `get*` variants as assertions
+## Usar as variantes de `get*` como asserções
 
 > Importância: baixa
 
@@ -502,29 +501,30 @@ screen.getByRole('alert', {name: /error/i})
 expect(screen.getByRole('alert', {name: /error/i})).toBeInTheDocument()
 ```
 
-This one's not really a big deal actually, but I thought I'd mention it and give
-my opinion on it. If `get*` queries are unsuccessful in finding the element,
-they'll throw a really helpful error message that shows you the full DOM
-structure (with syntax highlighting) which will help you during debugging.
-Because of this, the assertion could never possibly fail (because the query will
-throw before the assertion has a chance to).
+Esse não é grande coisa na verdade, mas eu pensei em mencioná-lo e dar minha opinião sobre ele.
+Se as queries `get*` não tiverem sucesso em encontrar o elemento,
+elas vão disparar uma mensagem de error bem útil que mostra a estrutura completa do DOM
+(com syntax highlighting) que vai te ajudar a debugar.
+Por conta disso, é impossível que a asserção falhe (porque a query vai disparar o erro antes que a asserção tenha chance de falhar).
 
-For this reason, many people skip the assertion. This really is fine honestly,
-but I personally normally keep the assertion in there just to communicate to
-readers of the code that it's not just an old query hanging around after a
-refactor but that I'm explicitly asserting that it exists.
+Por essa razão, muitas pessoas deixam sem a asserção. Honestamente, isso é ok,
+mas eu, pessoalmente, mantenho a asserção lá só para comunicar para os
+leitores do código que não é apenas uma query perdida depois de algum refactor
+mas que eu estou explicitamente testando que aquilo existe.
 
-**Conselho: If you want to assert that something exists, make that assertion explicit.**
+
+**Conselho: Se você quer testar se algo existe, faça a asserção explicitamente.**
 
 <br />
 
-## Conclusion
+## Conclusão
 
-As maintainers of the testing library family of tools, we do our best to make
-APIs that lead people to use things as effectively as possible and where that
-falls short we try to document things correctly. But this can be really
-difficult (especially as APIs change/improve/etc). Hopefully this was helpful to
-you. We really just want to make you more successful at shipping your software
-with confidence.
 
-Good luck!
+Como mantenedores da família de ferramentas testing library, damos o nosso melhor para fazer
+APIs que levam as pessoas a usarem as coisas da forma mais eficaz possível e onde isso
+falha, tentamos documentar as coisas corretamente. Mas isso pode ser realmente
+difícil (especialmente conforme as APIs são alteradas/melhoradas/etc). Espero que isso tenha sido útil para
+vocês. Nós realmente só queremos que você tenha mais sucesso na entrega de seu software
+com confiança.
+
+Boa Sorte!
