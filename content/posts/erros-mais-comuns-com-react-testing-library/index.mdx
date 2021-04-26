@@ -1,7 +1,7 @@
 ---
 slug: 'erros-comuns-com-react-testing-library'
 title: 'Erros comuns com React Testing Library [Tradução]'
-date: '2021-04-24'
+date: '2021-04-26'
 author: 'Kent C. Dodds'
 description:
   '_Alguns erros que eu vejo frequentemente ao utilizarem a React Testing Library._ Imagem de [Sarah Kilian](https://unsplash.com/photos/52jRtc2S_VE)'
@@ -17,18 +17,18 @@ keywords:
 banner: './images/banner.jpg'
 ---
 
-[Artigo original em Inglês](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
+[Artigo original (em Inglês) escrito por Kent C. Dodds](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
 
-Olá 👋 Eu criei a biblioteca React Testing porque eu não estava satisfeito com o cenário de testes naquele momento. Ela se expandiu para a DOM Testing Library e agora nós temos implementações da Testing Library (wrappers) para todos frameworks JavaScript populares e ferramenta de teste que focam no DOM (e até algumas que não).
+Olá 👋 Eu criei a biblioteca React Testing porque eu não estava satisfeito com o cenário de testes naquele momento. Ela se expandiu para a DOM Testing Library e agora nós temos implementações da Testing Library (wrappers) e ferramenta de teste que focam no DOM (e até algumas que não) para todos frameworks JavaScript populares.
 
 
-Com o passar do tempo, nós fizemos algumas pequenas mudanças na API e nós descobrimos alguns padrões subótimos. Apesar dos nossos esforços para documentar a "melhor forma" de usar as ferramentas que nós fornecemos, eu ainda vejo blog posts e testes escritos seguindo esses padrões subótimos e eu gostaria de passar por cada um deles, comentar o porquê de não serem ótimos e como você pode melhorar seus testes para evitar essas armadilhas.
+Com o passar do tempo, nós fizemos algumas pequenas mudanças na API e descobrimos alguns padrões subótimos. Apesar dos nossos esforços para documentar a "melhor forma" de usar as ferramentas que nós fornecemos, eu ainda vejo blog posts e testes escritos seguindo esses padrões subótimos e eu gostaria de passar por cada um deles, comentar o porquê de não serem ótimos e como você pode melhorar seus testes para evitar essas armadilhas.
 
-> Nota: Eu clasifiquei cada um desses pela importância:
+> Nota: Eu clasifiquei cada um deles pela importância:
 >
 > - baixa: isso é majoritariamente opinião minha, sinta-se a vontade para ignorar e você provavelmente não vai ter problemas
 > - média: talvez você encontre alguns bugs, perca confiança, ou tenha trabalho extra desnecessariamente
-> - alta: escute esse conselho! Você provavelmente está perdendo confiança ou terá testes problemáticos
+> - alta: escute esse conselho! Você provavelmente está perdendo confiança e/ou terá testes problemáticos
 
 <br/>
 
@@ -36,16 +36,16 @@ Com o passar do tempo, nós fizemos algumas pequenas mudanças na API e nós des
 
 > Importância: média
 
-Se você quer evitar vários desses erros comuns, então os plugins oficiais para ESLint podem te ajudar bastante:
+Se você quer evitar vários destes erros comuns, então os plugins oficiais para ESLint podem te ajudar bastante:
 
 - [eslint-plugin-testing-library](https://github.com/testing-library/eslint-plugin-testing-library)
 - [eslint-plugin-jest-dom](https://github.com/testing-library/eslint-plugin-jest-dom)
 
-**Conselho: Instale e use os plugins para ESLint data Testing Library**
+**Conselho: Instale e use os plugins para ESLint da Testing Library**
 
 <br />
 
-## Usar `wrapper` como nome para a variável que recebe o retorno de `render`
+## Usar `wrapper` como nome da variável que recebe o retorno de `render`
 
 > Importância: baixa
 
@@ -59,7 +59,7 @@ const {rerender} = render(<Example prop="1" />)
 rerender(<Example prop="2" />)
 ```
 
-O nome `wrapper` é velharia herdada do `enzyme` e nós não precisamos disso aqui. O valor retornado de `render` não está "wrapping" nada. É simplesmente uma coleção de utilidades que (graças ao próximo item) você realmente não deveria precisar com frequência de qualquer forma.
+O nome `wrapper` é coisa antiga herdada do `enzyme` e nós não precisamos disso aqui. O valor retornado de `render` não está "wrapping" nada. É simplesmente uma coleção de utilidades que (graças ao próximo item) você realmente não deveria precisar (com frequência) de qualquer forma.
 
 **Conselho: desestruture o que você precisar do retorno do `render` ou chame de `view`.**
 
@@ -79,8 +79,7 @@ afterEach(cleanup)
 import {render, screen} from '@testing-library/react'
 ```
 
-Já faz bastante tempo que `cleanup` acontece automaticamente (com suporte na maioria dos grandes frameworks de teste) e você não precisa se preocupar com isso.
-[Saiba mais](https://testing-library.com/docs/react-testing-library/api#cleanup).
+Já faz bastante tempo que `cleanup` acontece automaticamente (com suporte na maioria dos grandes frameworks de teste) e você não precisa se preocupar com isso ([saiba mais](https://testing-library.com/docs/react-testing-library/api#cleanup)).
 
 **Conselho: não use `cleanup`**
 
@@ -165,7 +164,7 @@ const input = screen.getByRole('textbox', {name: /choose a fruit/i})
 fireEvent.keyDown(input, {key: 'ArrowDown'})
 ```
 
-Eu vejo pessoas colocando `act` em volta de coisas como essas porque elas veem esses warnings com `act` o tempo todo e estão apenas tentando desesperadamente fazer com que eles desapareçam, mas o que eles não sabem é que `render` e `fireEvent` já estão envolvidos por `act`! Então aqueles ali que elas colocam em volta não está fazendo nada útil.
+Eu vejo pessoas colocando `act` em volta de coisas como essas porque elas veem esses warnings com `act` o tempo todo e estão apenas tentando desesperadamente fazer com que eles desapareçam, mas o que elas não sabem é que `render` e `fireEvent` já estão envolvidos por `act`! Então aqueles ali que elas colocam em volta não está fazendo nada útil.
 
 Na maioria das vezes, se você está vendo um warning com `act`, não é algo pra só ignorar ou tentar fazer desaparecer, na verdade isso está te avisando que algo inesperado está acontecendo com seu teste. Você pode aprender mais sobre isso com o meu blog post (e vídeos): [Corrija o warning "not wrapped in act(...)"](https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning).
 
@@ -189,7 +188,7 @@ screen.getByTestId('username')
 screen.getByRole('textbox', {name: /username/i})
 ```
 
-Nós mantemos uma página chamada ["Which query should I use?" (Qual query eu deveria usar?)](https://testing-library.com/docs/guide-which-query) de queries que você deveria tentar usar na ordem que você deveria tentar usar. Se o seu objetivo está alinhado com o nosso que é ter testes que tragam confiança que sua aplicação irá funcionar quando seus usuários a usarem, então você vai querer aplicar as queries no DOM o mais próximo possível da forma que o seu usuário final faz. As queries que nós fornecemos te ajudam a fazer isso, mas nem todas as queries são criadas igualmente.
+Nós mantemos uma página chamada ["Which query should I use?" (Qual query eu deveria usar?)](https://testing-library.com/docs/guide-which-query) de queries que você deveria tentar usar na ordem que você deveria tentar usar. Se o seu objetivo está alinhado com o nosso que é ter testes que tragam confiança que sua aplicação vai funcionar quando seus usuários a usarem, então você vai querer aplicar as queries no DOM o mais próximo possível da forma que o seu usuário final faz (indiretamente, mas faz). As queries que nós fornecemos te ajudam a fazer isso, mas nem todas as queries são criadas igualmente.
 
 ### Usar `container` para fazer query por elementos
 
@@ -206,7 +205,7 @@ render(<Example />)
 screen.getByRole('button', {name: /click me/i})
 ```
 
-Nós queremos garantir que seus usuários possam interagir com a sua UI e se você fazer as queries por aí usando `querySelector` nós perdemos grande parte dessa confiança, o teste é mais difícil de ler, e vai quebrar com mais frequência. Isso está de mãos dadas com a próxima subseção:
+Nós queremos garantir que seus usuários possam interagir com a sua UI e se você fizer as queries por aí usando `querySelector` nós perdemos grande parte dessa confiança, o teste é mais difícil de ler, e vai quebrar com mais frequência. Isso está de mãos dadas com a próxima subseção:
 
 ### Não fazer a query por texto
 
@@ -222,13 +221,13 @@ screen.getByRole('button', {name: /submit/i})
 
 Se você não usa a query com o texto verdadeiro, então você tem que fazer trabalho extra para ter certeza
 que suas traduções estão sendo aplicadas corretamente. A maior reclamação
-que eu escuto sobre isso é que isso faz com que criadores de conteúdo quebrem seus testes. Minha
+que eu escuto sobre isso é que faz com que criadores de conteúdo quebrem seus testes. Minha
 réplica a isso é que primeiro, se um criador de conteúdo troca "Username" por "Email",
 essa é uma troca que eu definitivamente quero saber sobre (porque eu vou ter que mudar minha implementação).
 Além disso, se há uma situação que eles quebram algo, arrumar isso não toma tanto tempo assim.
 É fácil de identificar e de corrigir.
 
-Então o custo é bem baixo, e o benefício é que você aumenta a confiança de que suas tradução estão sendo aplicadas corretamente _e_ seus testes são mais fáceis de escrever e de ler.
+Então o custo é bem baixo, e o benefício é que você aumenta a confiança de que suas traduções estão sendo aplicadas corretamente _e_ seus testes são mais fáceis de escrever e de ler.
 
 Vale mencionar que nem todo mundo concorda comigo nisso, fica a vontade para ler
 mais sobre isso [nesse fio no twitter](https://twitter.com/kentcdodds/status/1203179007644012544).
@@ -256,7 +255,7 @@ screen.getByText(/hello world/i)
 // provide a function for your text matcher to make your matcher more flexible.
 
 screen.getByRole('button', {name: /hello world/i})
-// ✅ works!
+// ✅ funciona!
 ```
 
 Uma razão pela qual as pessoas não usam as queries `*ByRole` é porque elas não estão familiarizadas
@@ -264,7 +263,7 @@ com os _roles_ implícitos colocado nos elementos.
 [Aqui está uma lista de Roles no MDN](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles).
 Outra que também é uma das minhas features favoritas das queries `*ByRole` é que se não conseguirmos
 encontrar um elemento com o role que você específicou, nós vamos mostrar na tela não somente o DOM inteiro como
-em caso de erros quando usado as variantes de `get*` ou `find*`, mas também iremos mostrar todos os roles disponíveis para você poder usar na query.
+em caso de erros quando usadas as variantes de `get*` ou `find*`, mas também iremos mostrar todos os roles disponíveis para você poder usar na query.
 
 ```javascript
 // Assumindo que esse é o DOM que nós temos para trabalhar
@@ -302,7 +301,7 @@ Here are the accessible roles:
 ```
 
 Note que nós não tivemos que adicionar `role=button` ao nosso botão para que ele tivesse o role button.
-Esse é um role implícito, o que nos leva perfeitamente ao nosso próximo... 
+Esse é um role implícito, o que nos leva perfeitamente ao nosso próximo item... 
 
 **Conselho: Leia e siga as recomendações do [Guia "Qual Query Eu Deveria Usar?"](https://testing-library.com/docs/guide-which-query).**
 
@@ -320,10 +319,9 @@ render(<button role="button">Click me</button>)
 render(<button>Click me</button>)
 ```
 
-Sair distribuindo atributos de acessibilidade sem pensar não é só desnecessário (como no
+Sair distribuindo atributos de acessibilidade sem pensar não só é desnecessário (como no
 caso acima), mas também pode confundir os leitores de tela e seus usuários. Os atributos
-de acessibilidade deveriam ser utilizadas apenas quando o HTML semântico não é o bastante
-no seu caso de uso (como o caso de você estar desenvolvendo uma UI não-nativa que você quer
+de acessibilidade deveriam ser utilizados apenas quando o HTML semântico não é o bastante (como no caso de você estar desenvolvendo uma UI não-nativa que você quer
 tornar acessível [como um autocomplete](https://github.com/downshift-js/downshift)). Se é
 isso que você está desenvolvendo, use uma biblioteca existente que seja acessível ou siga as práticas indicadas para WAI-ARIA.
 Geralmente eles tem [ótimos exemplos](https://www.w3.org/TR/wai-aria-practices/examples/accordion/accordion.html).
@@ -351,8 +349,8 @@ userEvent.type(input, 'hello world')
 é um pacote desenvolvido baseado no `fireEvent`, mas ele fornece vários métodos 
 que se assemelham mais com as interações feitas pelo usuário. No exemplo acima, 
 `fireEvent.change` vai simplesmente disparar um único evento change no input.
-Entretanto, o `userEvent.type` vai disparar eventos `keyDown`, `keyPress` e `keyUp`
-para cada um dos caracteres. É muito mais próximo a interação real do usuário.
+Entretanto, o `userEvent.type`, além do change, vai disparar os eventos `keyDown`, `keyPress` e `keyUp`
+para cada um dos caracteres. É muito mais próximo da interação real do usuário.
 Isso tem o benefício de funcionar bem com bibliotecas que talvez você use que não
 reagem ao evento change e sim aos outros.
 
@@ -366,7 +364,7 @@ Apesar disso, eu estou confiante o bastante para recomendar que você dê uma ol
 
 <br />
 
-## Usar as variantes `query*` para qualquer coisa exceto checar coisas que não existem
+## Usar as variantes `query*` para qualquer coisa diferente de testar que coisas não existem
 
 > Importância: alta
 
@@ -380,8 +378,8 @@ expect(screen.queryByRole('alert')).not.toBeInTheDocument()
 ```
 
 A _única_ razão que as queries do tipo `query*` são fornecidas é para você
-ter uma função que você pode chamar que não estoura um erro se nenhum elemento é encontrado
-(elas retornam `null` se nenhum elemento é encontrado). A _única_ razão para qual isso é útil é
+ter uma função que pode chamar sem estourar um erro se nenhum elemento é encontrado
+(elas retornam `null` quando isso acontece). A _única_ razão para qual isso é útil é
 para verificar que um elemento não foi renderizado na página.
 
 **Conselho: Use as variantes `query*` somente quando seu teste quer garantir que um elemento não pode ser encontrado.**
@@ -476,10 +474,10 @@ await waitFor(() => {
 })
 ```
 
-`waitFor` é indicado para coisas que vão levar um quantidade de tempo indeterminada
-entre a ação que você executou e a assertão que você está esperando se tornar verdade. Por conta disso,
-o callback pode ser chamado (ou testado) um número indeterminado de vezes numa frequência indeterminada
-(é chamado repetidas vezes com um intervalo e tabém sempre que o DOM sofre mutações). Então, isso significa que
+`waitFor` é indicado para coisas que vão levar uma quantidade de tempo indeterminada
+entre a ação que você executou e a asserção que você está esperando se tornar verdade. Por conta disso,
+o callback pode ser chamado (ou testado) um número indeterminado de vezes numa frequência também indeterminada
+(já que é chamado repetidas vezes com um intervalo e também sempre que o DOM sofre mutações). Então, isso significa que
 o seu efeito colateral pode estar sendo executado várias vezes!
 
 Isso também significa que você não pode usar snapshots com `waitFor`. Se você quer usar o teste por snapshot, então primeiro use o `waitFor`
@@ -501,7 +499,7 @@ screen.getByRole('alert', {name: /error/i})
 expect(screen.getByRole('alert', {name: /error/i})).toBeInTheDocument()
 ```
 
-Esse não é grande coisa na verdade, mas eu pensei em mencioná-lo e dar minha opinião sobre ele.
+Esse não é grande coisa na verdade, mas eu pensei em mencioná-lo e dar minha opinião.
 Se as queries `get*` não tiverem sucesso em encontrar o elemento,
 elas vão disparar uma mensagem de error bem útil que mostra a estrutura completa do DOM
 (com syntax highlighting) que vai te ajudar a debugar.
@@ -509,8 +507,8 @@ Por conta disso, é impossível que a asserção falhe (porque a query vai dispa
 
 Por essa razão, muitas pessoas deixam sem a asserção. Honestamente, isso é ok,
 mas eu, pessoalmente, mantenho a asserção lá só para comunicar para os
-leitores do código que não é apenas uma query perdida depois de algum refactor
-mas que eu estou explicitamente testando que aquilo existe.
+leitores do código que não é apenas uma query perdida depois de alguma refatoração
+e sim que eu estou explicitamente testando que aquilo existe.
 
 
 **Conselho: Se você quer testar se algo existe, faça a asserção explicitamente.**
@@ -520,11 +518,11 @@ mas que eu estou explicitamente testando que aquilo existe.
 ## Conclusão
 
 
-Como mantenedores da família de ferramentas testing library, damos o nosso melhor para fazer
+Como mantenedores da família de ferramentas Testing Library, damos o nosso melhor para fazer
 APIs que levam as pessoas a usarem as coisas da forma mais eficaz possível e onde isso
-falha, tentamos documentar as coisas corretamente. Mas isso pode ser realmente
+falha, tentamos documentar corretamente. Mas isso pode ser bem
 difícil (especialmente conforme as APIs são alteradas/melhoradas/etc). Espero que isso tenha sido útil para
-vocês. Nós realmente só queremos que você tenha mais sucesso na entrega de seu software
+vocês. Nós realmente só queremos que vocês tenham mais sucesso na entrega do seu software
 com confiança.
 
 Boa Sorte!
