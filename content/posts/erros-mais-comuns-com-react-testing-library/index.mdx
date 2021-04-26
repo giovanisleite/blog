@@ -145,7 +145,7 @@ Aquela asserção `toBeDisabled` vem da [`jest-dom`](https://github.com/testing-
 <br />
 [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom#tobedisabled)**
 
-## Colocando `act` em volta das coisas desnecessariamente
+## Colocar `act` em volta das coisas desnecessariamente
 
 > Importância: média
 
@@ -174,34 +174,27 @@ Na maioria das vezes, se você está vendo um warning com `act`, não é algo pr
 
 <br />
 
-## Using the wrong query
+## Usar a query errada
 
 > Importância: alta
 
 ```javascript
 // ❌
-// assuming you've got this DOM to work with:
+// Assumindo que você está trabalhando em cima desse DOM:
 // <label>Username</label><input data-testid="username" />
 screen.getByTestId('username')
 
 // ✅
-// change the DOM to be accessible by associating the label and setting the type
+// Mude o DOM para ser acessível associando a label ao input e informando o tipo do input
 // <label for="username">Username</label><input id="username" type="text" />
 screen.getByRole('textbox', {name: /username/i})
 ```
 
-We maintain a page called
-["Which query should I use?"](https://testing-library.com/docs/guide-which-query)
-of the queries you should attempt to use in the order you should attempt to use
-them. If your goal is aligned with ours of having tests that give you confidence
-that your app will work when your users use them, then you'll want to query the
-DOM as closely to the way your end-users do so as possible. The queries we
-provide you with help you do this, but not all queries are created equally.
+Nós mantemos uma página chamada ["Which query should I use?" (Qual query eu deveria usar?)](https://testing-library.com/docs/guide-which-query) de queries que você deveria tentar usar na ordem que você deveria tentar usar. Se o seu objetivo está alinhado com o nosso que é ter testes que tragam confiança que sua aplicação irá funcionar quando seus usuários a usarem, então você vai querer aplicar as queries no DOM o mais próximo possível da forma que o seu usuário final faz. As queries que nós fornecemos te ajudam a fazer isso, mas nem todas as queries são criadas igualmente.
 
-### Using `container` to query for elements
+### Usar `container` para fazer query por elementos
 
-As a sub-section of "Using the wrong query" I want to talk about querying on the
-`container` directly.
+Como uma subseção de "Usar a query errada" Eu quero falar sobre usando a query diretamente no `container`.
 
 ```javascript
 // ❌
@@ -214,17 +207,11 @@ render(<Example />)
 screen.getByRole('button', {name: /click me/i})
 ```
 
-We want to ensure that your users can interact with your UI and if you query
-around using `querySelector` we lose a lot of that confidence, the test is
-harder to read, and it will break more frequently. This goes hand-in-hand with
-the next sub-section:
+Nós queremos garantir que seus usuários possam interagir com a sua UI e se você fazer as queries por aí usando `querySelector` nós perdemos grande parte dessa confiança, o teste é mais difícil de ler, e vai quebrar com mais frequência. Isso está de mãos dadas com a próxima subseção:
 
-### Not querying by text
+### Não fazer a query por texto
 
-As a sub-section of "Using the wrong query", I want to talk about why I
-recommend you query by the _actual_ text (in the case of localization, I
-recommend the default locale), rather than using test IDs or other mechanisms
-everywhere.
+Como uma subseção de "Usar a query errada", eu quero falar porque eu recomendo que você use a query pelo texto _verdadeiro_  (Em caso de localização, eu recomendo que use o padrão), ao invés ficar usando test IDs ou outros mecanismos em todo canto.
 
 ```javascript
 // ❌
@@ -234,43 +221,37 @@ screen.getByTestId('submit-button')
 screen.getByRole('button', {name: /submit/i})
 ```
 
-If you don't query by the actual text, then you have to do extra work to make
-sure that your translations are getting applied correctly. The biggest complaint
-I hear about this is that it leads to content writers breaking your tests. My
-rebuttal to that is that first, if a content writer changes "Username" to
-"Email" that's a change I definitely want to know about (because I'll need to
-change my implementation). Also, if there is a situation where they break
-something, fixing that issue takes no time at all. It's easy to triage and easy
-to fix.
+Se você não usa a query com o texto verdadeiro, então você tem que fazer trabalho extra para ter certeza
+que suas traduções estão sendo aplicadas corretamente. A maior reclamação
+que eu escuto sobre isso é que isso faz com que criadores de conteúdo quebrem seus testes. Minha
+réplica a isso é que primeiro, se um criador de conteúdo troca "Username" por "Email",
+essa é uma troca que eu definitivamente quero saber sobre (porque eu vou ter que mudar minha implementação).
+Além disso, se há uma situação que eles quebram algo, arrumar isso não toma tanto tempo assim.
+É fácil de identificar e de corrigir.
 
-So the cost is pretty low, and the benefit is you get increased confidence that
-your translations are applied correctly _and_ your tests are easier to write and
-read.
+Então o custo é bem baixo, e o benefício é que você aumenta a confiança de que suas tradução estão sendo aplicadas corretamente _e_ seus testes são mais fáceis de escrever e de ler.
 
-I should mention that not everyone agrees with me on this, feel free to read
-more about it
-[in this tweet thread](https://twitter.com/kentcdodds/status/1203179007644012544).
+Vale mencionar que nem todo mundo concorda comigo nisso, fica a vontade para ler
+mais sobre isso [nesse fio no twitter](https://twitter.com/kentcdodds/status/1203179007644012544).
 
-### Not using `*ByRole` most of the time
+### Não usar `*ByRole` na maior parte do tempo
 
-As a sub-section of "Using the wrong query" I want to talk about `*ByRole`. In
-recent versions, the `*ByRole` queries have been seriously improved (primarily
-thanks to great work by
-[Sebastian Silbermann](https://twitter.com/sebsilbermann)) and are now the
-number one recommended approach to query your component's output. Here are some
-of my favorite features.
+Como uma subseção de "Usar a query errada" eu quero falar sobre `*ByRole`.
+Nas versões recentes, as queries `*ByRole` foram seriamente melhoradas
+(primeiramente graças ao grande trabalho do [Sebastian Silbermann](https://twitter.com/sebsilbermann))
+e agora são as mais recomendadas para o uso nos testes dos seus componentes. Aqui estão algumas das minhas features favoritas desse tipo de query.
 
-The `name` option allows you to query elements by their
-["Accessible Name"](https://www.w3.org/TR/accname-1.1/) which is what screen
-readers will read for the element _and_ it works even if your element has its
-text content split up by different elements. For example:
+A opção `name` permite que você faça a query por elementos pelo seu 
+["Nome acessível"](https://www.w3.org/TR/accname-1.1/) que é o que leitores de tela
+irão ler ao ler o elemento _e_ funciona mesmo que seu elemento tenha o
+texto dividido entre múltiplos elementos. Por exemplo:
 
 ```javascript
-// assuming we've got this DOM structure to work with
+// Assumindo que nós temos essa estrutura de DOM para trabalhar
 // <button><span>Hello</span> <span>World</span></button>
 
 screen.getByText(/hello world/i)
-// ❌ fails with the following error:
+// ❌ Falha com o seguinte erro:
 // Unable to find an element with the text: /hello world/i. This could be
 // because the text is broken up by multiple elements. In this case, you can
 // provide a function for your text matcher to make your matcher more flexible.
@@ -279,21 +260,20 @@ screen.getByRole('button', {name: /hello world/i})
 // ✅ works!
 ```
 
-One reason people don't use `*ByRole` queries is because they're not familiar
-with the implicit roles placed on elements.
-[Here's a list of Roles on MDN](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles).
-So another one of my favorite features of the `*ByRole` queries is that if we're
-unable to find an element with the role you've specified, not only will we log
-the entire DOM to you like we do with normal `get*` or `find*` variants, but we
-also log all the available roles you can query by!
+Uma razão pela qual as pessoas não usam as queries `*ByRole` é porque elas não estão familiarizadas
+com os _roles_ implícitos colocado nos elementos.
+[Aqui está uma lista de Roles no MDN](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles).
+Outra que também é uma das minhas features favoritas das queries `*ByRole` é que se não conseguirmos
+encontrar um elemento com o role que você específicou, nós vamos mostrar na tela não somente o DOM inteiro como
+em caso de erros quando usado as variantes de `get*` ou `find*`, mas também iremos mostrar todos os roles disponíveis para você poder usar na query.
 
 ```javascript
-// assuming we've got this DOM structure to work with
+// Assumindo que esse é o DOM que nós temos para trabalhar
 // <button><span>Hello</span> <span>World</span></button>
 screen.getByRole('blah')
 ```
 
-This will fail with the following error message:
+Isso vai falhar com a seguinte mensagem de erro:
 
 ```javascript
 TestingLibraryElementError: Unable to find an accessible element with the role "blah"
@@ -322,16 +302,14 @@ Here are the accessible roles:
 </body>
 ```
 
-Notice that we didn't have to add the `role=button` to our button for it to have
-the role of button. That's an implicit role, which leads us perfectly into our
-next one...
+Note que nós não tivemos que adicionar `role=button` ao nosso botão para que ele tivesse o role button.
+Esse é um role implícito, o que nos leva perfeitamente ao nosso próximo... 
 
-**Conselho: Read and follow the recommendations on
+**Conselho: Leia e siga as recomendações do [Guia "Qual Query Eu Deveria Usar?"](https://testing-library.com/docs/guide-which-query).**
 
 <br />
-[The "Which Query Should I Use" Guide](https://testing-library.com/docs/guide-which-query).**
 
-## Adding `aria-`, `role`, and other accessibility attributes incorrectly
+## Adicionar `aria-`, `role`, e outros atributos de acessibilidade incorretamente
 
 > Importância: alta
 
@@ -343,20 +321,18 @@ render(<button role="button">Click me</button>)
 render(<button>Click me</button>)
 ```
 
-Slapping accessibility attributes willy nilly is not only unnecessary (as in the
-case above), but it can also confuse screen readers and their users. The
-accessibility attributes should really only be used when semantic HTML doesn't
-satisfy your use case (like if you're building a non-native UI that you want to
-make accessible
-[like an autocomplete](https://github.com/downshift-js/downshift)). If that's
-what you're building, be sure to use an existing library that does this
-accessibly or follow the WAI-ARIA practices. They often have
-[great examples](https://www.w3.org/TR/wai-aria-practices/examples/accordion/accordion.html).
+Sair distribuindo atributos de acessibilidade sem pensar não é só desnecessário (como no
+caso acima), mas também pode confundir os leitores de tela e seus usuários. Os atributos
+de acessibilidade deveriam ser utilizadas apenas quando o HTML semântico não é o bastante
+no seu caso de uso (como o caso de você estar desenvolvendo uma UI não-nativa que você quer
+tornar acessível [como um autocomplete](https://github.com/downshift-js/downshift)). Se é
+isso que você está desenvolvendo, use uma biblioteca existente que seja acessível ou siga as práticas indicadas para WAI-ARIA.
+Geralmente eles tem [ótimos exemplos](https://www.w3.org/TR/wai-aria-practices/examples/accordion/accordion.html).
 
-> Note: to make `input`s accessible via a "role" you'll want to specify the
-> `type` attribute!
+> Obs: para fazer `input`s acessíveis via "role" você terá que especificar o
+> atributo `type`!
 
-**Conselho: Avoid adding unnecessary or incorrect accessibility attributes.**
+**Conselho: Evite adicionar atributos de acessibilidade desnecessários ou incorretos.**
 
 <br />
 
