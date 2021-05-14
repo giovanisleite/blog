@@ -58,9 +58,32 @@ Para o espaçamento do texto, há duas propriedades. *line-height*, referente ao
 
 Dando uma olhada nop devtools, além de toda ajuda que o selector (aquele que quando fica azul te deixa escolher um elemento da tela e ver os detalhes dele, estilos e etc) pode trazer, gostei de saber que o Chrome (provavelmente o Firefox também) oferece um _Constrast Ratio_ quando você clica nos detalhes de uma cor, para ser acessível tem que ser mantido acima de 4,5.
 
-### Módulo 1
+### Módulo 1 (Rascunho do resumo em andamento)
 
-Comecei!
+O segundo módulo é sobre a lógica de renderização praticada pelos browsers.
+
+Os browsers tem algumas configurações padrões de estilo, vale ressaltar que cada um tem a sua, então uma boa prática é
+resetar essas propriedades para mantermos nosso site consistente em diferentes browsers.
+
+Alguns comportamentos que vale lembrar, é o de herança. Esse mecanismo pode gerar estranheza quando não esperamos que certo
+elemento apresente estilos que aplicamos a outro, termos em mente que isso acontece é bom porque acontece apenas [por padrão
+apenas com algumas propriedades](https://www.sitepoint.com/css-path-function-squeaky-portraits/). Sabendo quais são essas
+propriedades e até mesmo sabendo aproveitar do mecanismo de inheritance pode nos poupar tempo e trabalho
+
+O algoritmo Cascade é o que calcula quais serão os estilos aplicados a um elemento seguindo a especifidade das regras criadas (seja da seleção ou da declaração). Atualmente a especificidade aplicada segue a ordem:
+Declarações com !important > Estilos inline (tag style) > Regras aplicadas a seleção pelo ID > Regras aplicadas a seleção feito por classes > Regras aplicadas a seleção feita por tag > Declarações herdadas (properidades com valor inherit).
+As aplicações React que utilizam Styled Components não utilizam com muita frequencia CSS que se aproveita dessas regras
+já que o estilo está colado no componente, sem a necessidade de seleção, por exemplo.
+
+A página web tem duas direções:
+- Uma delas é a Block que é vertical, ou seja, uma coisa vai em cima da outra.
+- E a outra é a Inline, onde uma coisa vai ao lado da outra.
+
+Ser da esquerda para a direita e do topo para baixo são ditados pelo writing-mode. Em idiomas como o árabe, da direita para esquerda é o padrão, ao invés do nosso (da esquerda para a direita).
+
+margin-block-start, margin-inline-start e margin-block-end, são alguns exemplos dos operadores chamados [operadores lógicos](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties), por conta dessa variação de direções, eles são úteis. Esses margins, há também paddings e borders, atuam de acordo com o writing-mode. Se o idioma é da direita para a esquerda, o margin-inline-start será a direita e vice-versa. Diferente dos operador margin-left, por exemplo, que sempre será a esquerda.
+
+O chamado Box Model é formado pelo conteúdo, o padding, o border e o margin. 
 
 ### Módulo 2
 
