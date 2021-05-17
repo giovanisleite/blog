@@ -1,6 +1,6 @@
 require(`dotenv`).config({
   path: `.env`,
-})
+});
 
 module.exports = {
   siteMetadata: {
@@ -17,7 +17,7 @@ module.exports = {
     // Will be set on the <html /> tag
     siteLanguage: `pt-BR`,
     // Used for og:image and must be placed inside the `static` folder
-    siteImage: `/banner.jpg`,
+    siteImage: `/banner.webp`,
     // Twitter Handle
     author: `@queleabraco`,
   },
@@ -39,14 +39,14 @@ module.exports = {
           {
             name: `Twitter`,
             url: `https://twitter.com/queleabraco`,
-          }
+          },
         ],
       },
     },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: 'UA-138722564-1',
+        trackingId: "UA-138722564-1",
       },
     },
     `gatsby-plugin-sitemap`,
@@ -77,4 +77,4 @@ module.exports = {
     `gatsby-plugin-offline`,
     `gatsby-plugin-netlify`,
   ],
-}
+};
