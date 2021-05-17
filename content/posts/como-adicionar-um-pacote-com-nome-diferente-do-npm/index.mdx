@@ -1,0 +1,33 @@
+---
+title: "Como adicionar um pacote ao projeto com nome diferente do NPM"
+date: 2021-05-16
+slug: "/como-adicionar-pacote-com-nome-diferente-do-npm"
+tags:
+ - javascript
+---
+
+## TL;DR
+
+```json
+// package.json
+{
+  "name": "Our Amazing Project",
+  "version": "0.0.1",
+  "dependencies": {
+    "pacote-novo-nome": "npm:pacote-nome-original@0.0.1"
+  }
+}
+```
+
+<br />
+
+## Pra que?
+
+Usei essa funcionalidade para migrar aos poucos de uma versão antiga do pacote para uma versão mais nova. Com as
+duas versões instaladas é possível adicionar novas features já usando a nova versão enquanto o uso da versão antiga
+é atualizado aos poucos.
+
+Essa é uma forma saudável de atualizar dependências do seu projeto que a migração da versão tomaria muito tempo e dificilmente conseguiria convencer (__INSIRA AQUI QUEM TEM QUE CONCORDAR COM A DECISÃO DE FICAR UM TEMPO SEM ENTREGAR FEATURE MIGRANDO BIBLIOTECA__) de parar tudo pra fazer a migração.
+
+Além de ser mais seguro ir aos poucos, estilo refatoração, porque as mudanças passam pelo Q.A. do seu time se elas vão
+junto com o fluxo normal de desenvolvimento de novas features e modificações nas já presentes.
