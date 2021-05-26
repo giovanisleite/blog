@@ -83,13 +83,67 @@ A página web tem duas direções:
 
 Ser da esquerda para a direita e do topo para baixo são ditados pelo writing-mode. Em idiomas como o árabe, da direita para esquerda é o padrão, ao invés do nosso (da esquerda para a direita).
 
-margin-block-start, margin-inline-start e margin-block-end, são alguns exemplos dos operadores chamados [operadores lógicos](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties), por conta dessa variação de direções, eles são úteis. Esses margins, há também paddings e borders, atuam de acordo com o writing-mode. Se o idioma é da direita para a esquerda, o margin-inline-start será a direita e vice-versa. Diferente dos operador margin-left, por exemplo, que sempre será a esquerda.
+margin-block-start, margin-inline-start e margin-block-end, são alguns exemplos dos operadores chamados [operadores lógicos](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties),
+por conta dessa variação de direções, eles são úteis. Esses margins,
+há também paddings e borders, atuam de acordo com o writing-mode. Se o idioma é da direita para a esquerda,
+o margin-inline-start será a direita e vice-versa. Diferente dos operador margin-left,
+por exemplo, que sempre será a esquerda.
 
-O chamado Box Model é formado pelo conteúdo, o padding, o border e o margin. 
+O chamado Box Model é formado pelo conteúdo, o padding, o border e o margin.
+Uma propriedade CSS bastante encontrada nos códigos para resetar o CSS dos browsers é a _box-sizing_.
+Essa propriedade diz ao browser se o padding e a border estão incluídos nas medidas (width e height) - no caso, quando seu valor é _border-box_ - ou não - quando o seu valor é _content-box_ ([para saber mais](https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing)). Normalmente, utilizamos _border-box_ para todos elementos para facilitar
+a forma com que pensamos o tamanho dos elementos.
+
+Outline é uma propriedade mostrada por fora da borda, mas ela não ocupa espaço, é como uma sombra. Essa propriedade é bastante importante para usuários que navegam pelo teclado, por exemplo.
+Apesar de ser muito comum as pessoas removerem essa propriedade (outline: none) por questões estéticas
+(sem colocar outra coisa no lugar para representar o foco no elemento),
+é uma péssima prática já que torna a aplicação menos acessível.
+
+Existem diferentes tipos de Layout: Flow (default), Flexbox (Flexible Box) e Grid (CSS Grid).
+
+Todo elemento HTML tem um display intrínseco, seja ele block, inline ou inline-block. No Flow, os elementos inline são dispostos na direção inline (horizonal, no nosso caso), enquanto os elementos block são dispostos na direção vertical.
+
+Se você já tentou adicionar uma propriedade referente ao posicionamento ou as medidas dos elementos inline, você deve ter percebido que simplesmente não funciona. Você pode até manipular
+através de margin, mas você não consegue alterar a largura ou a altura.
+Apesar de ser possível adicionar padding a elementos inline, tem que ser cuidadoso porque os efeitos podem ser inesperados.
+
+Alguns elementos são tipo uma subcategoria, os replaced elements (img, video, canvas), apesar de todos serem tecnicamente inline, eles podem afetar como os elementos do tipo block se comportam.
+A outra exceção são os buttons, eles também podem receber a algura e largura.
+
+Quando você coloca um elemento do tipo block na página, ele ocupa todo o espaço horizontal disponível.
+
+E o inline-block é a junção que vem pra pertimir que você coloque um elemento block em um contexto inline. Podemos, por exemplo, adicionar largura e altura para um elemento strong.
+
+Width pode receber dois tipos de valores, medidas (px, rem, %) ou keywords (auto, fit-content, min-content, max-content). Os elementos do tipo block, por exemplo, tem width como auto, por padrão. Ou seja, o elemento ocupa o máximo de espaço possível horizontalmente.
+
+Já no caso de Height, o padrão é ter o menor valor possível.
+Podemos considerar que height é mais dinâmico que width e dificilmente queremos determinar uma altura fixa para um elemento (evitando problemas).
+
+Cuidado com uso de porcentagens em altura, como, na maioria dos casos, a altura é dinâmica. O elemento pai terá a altura determinada por quanto os elementos filhos vão ocupar, se usarmos % nas alturas dos filhos vamos chegar a uma situação impossível. Que a altura do pai depende da dos filhos e a dos filhos depende da do pai.
+
+Use 100% height no html e no body (e evite usar em elementos dentro do wrapper) ao invés de vh para evitar situações bizarras no mobile.
+
+```css
+html, body {
+  height: 100%;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+footer {
+  border: solid hotpink;
+  padding: 8px;
+  margin-top: auto;
+}
+```
 
 ### Módulo 2
 
-Não comecei
+Comecei!
 
 ### Módulo 3
 
