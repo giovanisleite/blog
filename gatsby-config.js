@@ -76,5 +76,12 @@ module.exports = {
     },
     `gatsby-plugin-offline`,
     `gatsby-plugin-netlify`,
+    {
+      resolve: `gatsby-plugin-canonical-urls`,
+      options: {
+        siteUrl: `https://giovanisleite.dev`,
+        stripQueryString: true,
+      },
+    },
   ],
 };
