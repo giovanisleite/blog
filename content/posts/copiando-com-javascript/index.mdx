@@ -1,0 +1,35 @@
+---
+slug: 'copiando-com-javascript'
+title: 'Copiando com Javascript - Clipboard API'
+date: '2021-05-29'
+description:
+  '_Como copiar com Javascript utilizando Clipboard API._ Imagem de [Sigmund](https://unsplash.com/@sigmund)'
+tags:
+ - javascript
+ - Web APIs
+banner: './banner.webp'
+---
+
+TL;DR
+
+```javascript
+let textToCopy = "Eu quero copiar esse texto aqui"
+
+function afterSuccess() {
+    console.log('Copiado com sucesso!')
+}
+
+function afterFailure(error) {
+    console.error('A Cópia falhou!', error)
+}
+
+window.navigator.clipboard
+    .writeText(textToCopy)
+    .then(afterSuccess, afterFailure)
+```
+
+Numa era pré [ClipboardAPI](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API), a solução para copiar e colar algum texto que eu mais vi envolvia adicionar a página um input com o texto que você quer, colocar o foco naquele input, selecionar o texto e enviar o comando `document.execCommand("copy")`. E em muitos casos essa ainda é a melhor solução dependendo de quais browsers a sua aplicação deve manter compatibilidade. Você pode comparar o suporte dessa feature utilizando o [caniuse.com](caniuse.com). Suporte a [document.execCommand](https://caniuse.com/document-execcommand) x Suport a [Clipboard API write text](https://caniuse.com/mdn-api_clipboard_writetext). [Em caso de IE, não tem jeito, vai ter que usar `document.execCommand`](https://stackoverflow.com/a/46118025/7838074).
+
+Para o uso do Clipboard API, além de conhecer a API em si, temos que respeitar algumas regras por questão de segurança. Uma delas, por exemplo, é que o clipboard.writeText vai falhar caso o usuário não esteja com foco na aba. Você pode ver esse erro acontecendo, testando o código no console do seu browser (isso no Chrome). Em alguns outros browsers, esse código só funciona caso esteja num código sendo executado em resposta a uma ação do usuário, como um click por exemplo. Então, tenha isso em mente ao utilizar essa API.
+
+O código é simples, a função `window.navigator.clipboard.writeText` retorna uma [`Promise`](https://medium.com/trainingcenter/entendendo-promises-de-uma-vez-por-todas-32442ec725c2), ou seja, ele é assíncrono, logo após a sua execução pode ser que ele ainda não tenha terminado de copiar. Por isso, nós utilizamos o `.then`, para que quando essa `Promise` seja resolvida, ou seja, o comando tenha de fator terminado de copiar ou dado erro, no caso de sucesso execute a nossa função `afterSuccess` e em caso de erro execute nossa outra função, `afterFailure`. E é isso, assim que aparecer a mensagem de sucesso, já estamos livres pra sair colando nossa mensagem.
