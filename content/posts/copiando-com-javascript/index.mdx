@@ -6,6 +6,7 @@ description:
   '_Como copiar com Javascript utilizando Clipboard API._ Imagem de [Sigmund](https://unsplash.com/@sigmund)'
 tags:
  - javascript
+ - Clipboard API
  - Web APIs
 banner: './banner.webp'
 ---
@@ -28,7 +29,7 @@ window.navigator.clipboard
     .then(afterSuccess, afterFailure)
 ```
 
-Numa era pré [ClipboardAPI](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API), a solução para copiar e colar algum texto que eu mais vi envolvia adicionar a página um input com o texto que você quer, colocar o foco naquele input, selecionar o texto e enviar o comando `document.execCommand("copy")`. E em muitos casos essa ainda é a melhor solução dependendo de quais browsers a sua aplicação deve manter compatibilidade. Você pode comparar o suporte dessa feature utilizando o [caniuse.com](caniuse.com). Suporte a [document.execCommand](https://caniuse.com/document-execcommand) x Suport a [Clipboard API write text](https://caniuse.com/mdn-api_clipboard_writetext). [Em caso de IE, não tem jeito, vai ter que usar `document.execCommand`](https://stackoverflow.com/a/46118025/7838074).
+Numa era pré [ClipboardAPI](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API), a solução para copiar e colar algum texto que eu mais vi envolvia adicionar à página um input com o texto que você quer copiar, colocar o foco naquele input, selecionar o texto e enviar o comando `document.execCommand("copy")`. E em muitos casos essa ainda é a melhor solução dependendo de quais browsers a sua aplicação deve-se manter compatível. Você pode comparar o suporte dessa feature utilizando o [caniuse.com](caniuse.com). Suporte a [document.execCommand](https://caniuse.com/document-execcommand) x Suport a [Clipboard API write text](https://caniuse.com/mdn-api_clipboard_writetext). [Em caso de IE, não tem jeito, vai ter que usar `document.execCommand`](https://stackoverflow.com/a/46118025/7838074).
 
 Para o uso do Clipboard API, além de conhecer a API em si, temos que respeitar algumas regras por questão de segurança. Uma delas, por exemplo, é que o clipboard.writeText vai falhar caso o usuário não esteja com foco na aba. Você pode ver esse erro acontecendo, testando o código no console do seu browser (isso no Chrome). Em alguns outros browsers, esse código só funciona caso esteja num código sendo executado em resposta a uma ação do usuário, como um click por exemplo. Então, tenha isso em mente ao utilizar essa API.
 
