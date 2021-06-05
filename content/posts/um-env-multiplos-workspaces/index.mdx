@@ -1,0 +1,36 @@
+---
+slug: 'um-env-multiplos-workspaces'
+title: 'Um .env para todos workspaces'
+date: '2021-06-05'
+description:
+  '_Como usar um .env para todos os seus yarn workspaces_ Imagem da [Vox](https://www.vox.com/2016/10/3/13149670/google-new-os-andromeda-operating-system-chrome-android)'
+tags:
+ - yarn workspaces
+ - javascript
+banner: 'one-ring.webp'
+---
+
+A feature do Yarn Workspaces é bastante útil quando você quer ter várias aplicações ou bibliotecas
+no mesmo repositório. Um famigerado monorepo. O [Roberto Achar](https://twitter.com/robertoachar) fez [um post sobre como configurar um monorepo utilizando o Yarn Workspaces](https://robertoachar.dev/blog/yarn-workspaces). A [biblioteca do Material-UI para React](https://github.com/mui-org/material-ui) é um exemplo de repositório que tem múltiplos pacotes juntos e usa Yarn Workspaces.
+
+São várias as organizações que podemos fazer nesse esquema, podemos ter aplicações independentes, uma lib que é usada por todas as outras, várias independentes e uma que usa todas elas e etc. Nesse mundo de aplicações, durante o desenvolvimento, ter um .env para cada uma pode não fazer sentido ou simplesmente ser chato demais por ter que ficar cada hora mudando em um lugar diferente, copiando de um pro outro e etc.
+
+Um comando e uma alteração nos seus scripts pode resolver isso:
+
+1. Instale a biblioteca [`dotenv-cli`](https://github.com/entropitor/dotenv-cli)
+
+```bash
+yarn add --dev dotenv-cli
+```
+
+<br/>
+
+2. Adicione `dotenv -e .env` antes do seu comando que irá iniciar a aplicação/lib, por exemplo:
+```json
+//package.json
+"scripts": {
+    "start-frontend": "dotent -e yarn workspace frontend start"
+}
+```
+
+Assim, sua aplicação vai poder acessar as váriaveis que você configurou no seu `.env` da raiz 🎉
