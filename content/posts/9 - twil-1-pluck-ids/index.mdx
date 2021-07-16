@@ -1,0 +1,13 @@
+---
+slug: "ids-pluck-id"
+title: "TWIL #1 - #ids ao invés de pluck :id"
+date: "2021-07-15"
+description: "Use .ids ao invés de pluck :id (Photo by Vidar Nordli-Mathisen - Unsplash - https://unsplash.com/photos/cSsvUtTVr0Q)"
+tags:
+  - rails
+banner: "pluck.webp"
+---
+
+Quando temos uma coleção de itens do banco no Rails (Active Record), podemos utilizar o método `pluck` para selecionar apenas alguns campos e não precisarmos carregar vários itens na memória sendo que qureremos apenas um ou outro campo. É um dos métodos que eu mais uso, principalmente, debugando. O uso mais comuns é para consultar os ids. Algo como `users.pluck :id`. Em um PR, num dia qualquer desses, me contaram que existe o .ids 😲.
+
+E esse é o primeiro This Week I Learned (TWIL), usem `.ids` ao invés de `.pluck :id` 🎉. Digita menos e o resultado é o mesmo
