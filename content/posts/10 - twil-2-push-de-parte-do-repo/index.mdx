@@ -1,0 +1,24 @@
+---
+slug: "push-sub-tree"
+title: "TWIL #2 - Monorepo e deploys separados - Descobrindo o git submodule"
+date: "2021-07-15"
+description: "Uso do git subtree (Photo by Zach Reiner on Unsplash - https://unsplash.com/photos/H7LxvEmVZnE)"
+tags:
+  - git
+banner: "branch.webp"
+---
+
+Estava fazendo uma aplicação, testando umas paradas, em um monorepo. A raiz do projeto com duas pastas, uma com o front, React, e outra com o backend, Rails. Tudo beleza localmente, daí chega a hora do deploy. Estou acostumado a usar o Heroku para o backend e o Netlify para o frontend, segui com esses. Daí veio o sofrimento, como fazer o Heroku rodar uma aplicação Rails que não está na pasta raiz?
+
+A melhor solução veio com ele, o git!
+
+O git tem uma feature para facilitar a manutenção de múltiplos repositórios em um só, [git subtree](https://www.atlassian.com/git/tutorials/git-subtree). Assim, você pode organizar os repositórios remotos de forma que você faça o push de apenas uma das pastas por exemplo para um repositório. E como isso se encaixa na solução do nosso problema?
+
+Quando você está com uma aplicação no heroku, você pode adicioná-lo como um repositório remoto além do default (origin). Assim, sempre que você fizer um push para esse outro repositório vai acontecer um deploy no Heroku. Assim, utilizando o comando `git subtree push --prefix api/ heroku master` eu consegui mandar para o Heroku apenas a pasta da API sem precisar configurar nada, além do padrão, para que ele rodasse a aplicação Rails, visto que ele estava esperando que a aplicação fosse a raiz do projeto. Dessa forma ele só tem acesso ao backend e roda tranquilamente 🎉
+
+E esse é o segundo This Week I Learned (TWIL) 😊
+
+Para saber mais:
+
+- [Guia introdutório](https://gist.github.com/SKempin/b7857a6ff6bddb05717cc17a44091202)
+- [Tutorial feito pela Atlassian](https://www.atlassian.com/git/tutorials/git-subtree)
