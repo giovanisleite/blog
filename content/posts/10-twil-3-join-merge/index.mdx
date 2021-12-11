@@ -1,0 +1,48 @@
+---
+slug: "join-e-merge"
+title: "TWIL #3 - Active Record: Filtro nas relações"
+date: "2021-12-11"
+description: "Tem uma forma mais fácil de filtrar elementos por campos das relações. Se liga!"
+tags:
+  - rails
+banner: "join.webp"
+---
+
+Comecei a trabalhar com o pessoal da [Thoughtbot](https://thoughtbot.com/) em agosto desse ano e antes de entrar no time estava dando uma relembrada/estudada em Ruby e Ruby on Rails. Uma das paradas que encontrei foi a belezinha que inspirou esse post.
+
+Imagina que em uma aplicação nós temos modelos que se relacionam. Como, por exemplo, um usuário e seus compromissos. Nesse caso, cada registro do modelo Compromisso (Appointment) pertence a um registro do modelo Usuário (User). E nós queremos selecionar todos os usuários que tem compromisso no mês de janeiro de 2022. Há várias formas de fazer essa seleção, algumas são bastante contra-indicadas, como olhar todos compromissos de janeiro de 2022 e ir uma a uma coletando os usuários (NÃO FAÇA ISSO).
+
+Para esse tipo de seleção, nós precisamos de um `JOIN`.
+
+```ruby
+User.joins(:appointments)
+```
+
+A partir desse `JOIN`, nós podemos fazer o nosso filtro pelo campo que contém a data, exemplo `starts_at`, que é um campo do Compromisso (`Appointment`).
+
+```ruby
+january_start = DateTime.new(2022, 1, 1).beginning_of_month
+january_end = january_start.end_of_month
+
+User.joins(:appointments)
+    .where({ appointments: { starts_at: january_start..january_end  } })
+```
+
+Tem um jeito de fazer que gera a mesma `query`, mas eu acho que fica mais legível, principalmente, quando esses filtros nas relações são mais complexos.
+
+```ruby
+january_start = DateTime.new(2022, 1, 1).beginning_of_month
+january_end = january_start.end_of_month
+
+appointments_in_january = Appointment.where(
+    starts_at: january_start..january_end
+)
+
+User.joins(:appointments).merge(appointments_in_january)
+```
+
+Assim, selecionamos os usuários que tem compromissos começando em Janeiro de 2022.
+
+Eu aprendi isso e outras coisas mais em um dos cursos do Upcase (plataforma de cursos, gratuitos, desenvolvidos pela Thoughtbot). Para saber mais:
+
+- [Advanced ActiveRecord Querying](https://thoughtbot.com/upcase/advanced-activerecord-querying)
