@@ -1,0 +1,51 @@
+---
+slug: "controlando-quebra-de-linha"
+title: "Controlando a quebra de linha"
+date: "2022-05-02"
+description: "_Como um caracter especial pode salvar a quebra de linha e alguns minutos da sua vida!_ Imagem de [@fabiosbruun](https://unsplash.com/photos/Y6tGu-OH8lA)"
+tags:
+  - HTML
+  - CSS
+banner: "./banner.webp"
+---
+
+Seja para criar um efeito estético ou evitar algum problema, tipo uma palavra viúva, aquela que sobra para outra linha no final de um parágrafo, é legal ter umas cartas na manga para dar aquela ajeita nos textos e nas quebras de linha. Ainda mais quando tratamos de partes chave do projeto, como a primeira coisa que vão ver no site que você está desenvolvendo, como é o caso da _Hero Section_[^1].
+
+Por exemplo, estamos criando um site que o texto da nossa _Hero Section_ é "Vamos Jogar um Basquete". Os designers do nosso time pediram que a frase ocupe apenas uma linha em telas grandes o bastante, mas nas demais, o desejado é que ao quebrar, nunca a palavra "Basquete" fique sozinha na segunda linha.
+
+Obviamente, podemos dar uma olhada como a frase fica disposta em vários tamanhos de tela e forçarmos a quebra de linha entre as palavras "jogar" e "um" com uma tag `<br>` e, para os tamanhos de tela, que cabem a frase toda, podemos usar [media-queries[^2]](https://developer.mozilla.org/pt-BR/docs/Web/CSS/Media_Queries/Using_media_queries) para esconder a quebra de linha.
+
+```html
+<section class="hero">
+  <h1> Vamos Jogar<br>um Basquete</h1>
+  <button>Jogar</div>
+</section>
+```
+
+Mas tem um jeito muito mais fácil e escrevendo muito menos! **É utilizando o caracter especial _Non-breaking space_[^3], no HTML ele é invocado assim: `&nbsp;`.** Esse caractere funciona como um espaço, mas, no momento da quebra da linha, ele não vai ser considerado. É como se "Um Basquete" fosse uma palavra só sob a regra padrão de quebra de linha, na qual uma palavra é indivisível.
+
+Codando nosso exemplo:
+
+<iframe
+  height="400"
+  style="width: 100%;"
+  scrolling="no"
+  title="Vamos Jogar Um Basquete - Solução"
+  src="https://codepen.io/giovanileite/embed/JjpoRex?default-tab=html%2Cresult"
+  frameborder="no"
+  loading="lazy"
+  allowtransparency="true"
+  allowfullscreen="true"
+>
+  See the Pen{" "}
+  <a href="https://codepen.io/giovanileite/pen/JjpoRex">
+    Vamos Jogar Um Basquete - Solução
+  </a>{" "}
+  by Giovani de Sousa Leite (
+  <a href="https://codepen.io/giovanileite">@giovanileite</a>) on{" "}
+  <a href="https://codepen.io">CodePen</a>.
+</iframe>
+
+[^1]: Geralmente, a primeira dobra (o que aparece no seu navegador assim que abre o site) da página inicial dos sites é chamada de _Hero Section_. A versão mais comum é uma imagem de fundo, um texto grande com o nome do produto e/ou um slogan e um botão convidando a se cadastrar, comprar o produto ou algo que seja do interesse do site em questão.
+[^2]: https://developer.mozilla.org/pt-BR/docs/Web/CSS/Media_Queries/Using_media_queries
+[^3]: https://en.wikipedia.org/wiki/Non-breaking_space
