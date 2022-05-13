@@ -1,0 +1,67 @@
+---
+slug: "falta-algo-no-seu-commit"
+title: "Falta algo no seu commit"
+date: "2022-05-13"
+description: "O histórico de commits e pull requests é uma documentação incrível sobre a evolução do seu projeto. Tem uma informação faltando lá e ela pode fazer um futuro melhor"
+tags:
+  - git
+  - boas práticas
+banner: "banner.png"
+---
+
+import gif from "./gimli.gif";
+
+Falta algo no seu commit. O histórico de commits e pull requests é uma documentação incrível sobre a evolução do seu projeto. Assumindo que você já usa [boas mensagens de commit](https://www.freecodecamp.org/news/writing-good-commit-messages-a-practical-guide/), no histórico do seu projeto (`git log`), você já tem qual foi a mudança - no título ou vendo a mudança (`git diff`), quando aconteceu e quem fez essa mudança. Mas tem dois pedaços de informação que normalmente não estão ali.
+
+Um desses pedaços de informação faltando no seu commit é a razão pela qual você fez a mudança. É comum essa informação estar em uma ferramenta de gerenciamento de projetos — como Jira, Trello ou Pivotal Tracker. O melhor caso é essa conexão ser feita numa via de mão dupla, a partir da ferramenta é possível encontrar o commit, e, partindo do commit, é possível encontrar o ticket na ferramenta.
+
+O segundo pedaço é a explicação da solução. Quais as razões que te levaram a resolver aquela demanda (o primeiro pedaço da informação) daquela forma (o que podemos ver no git diff). Essa informação é muito valiosa e, muitas vezes, fica guardada na sua cabeça até não estar mais.
+
+Para muitas pessoas desenvolvedoras, a maioria do trabalho no código é manutenção de que já existe. Passa pelo processo de ler, entender como funciona e aplicar as mudanças de acordo com a demanda, seja para corrigir um bug, adicionar uma nova funcionalidade e quem sabe até remover algo. [Antes de tirar a cerca, é importante entender por que ela foi colocada ali](https://fs.blog/chestertons-fence/), qual era o problema anterior a última mudança, o que ele resolveu, por que resolveu daquela forma.
+
+E temos um lugar perfeito para guardar essa informação. O commit é formado pela descrição curta (também chamada de título) e pela descrição longa, pouquíssimo utilizada. Mas é bem simples de adicionar, direto do terminal, é a string após o segundo `-m`:
+
+```bash
+git commit -m "Descrição curta" -m "Descrição longa."
+```
+
+Ou editando o commit posteriormente com `git commit --amend`:
+
+```
+Descrição curta
+
+Descrição longa
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Author:    YOU! <your-email@email.com>
+# Date:      Thu May 13 09:31:52 2022 -0300
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   file-changed.txt
+#
+```
+
+Adicionar a motivação e a razão por trás da solução como descrição longa do commit — conectando a mudança do código com o que temos na ferramenta de gerenciamento de demanda e registrando nosso raciocínio—, é parte da comunicação do time e enriquece muito a tomada de decisão futura.
+
+Tendo uma extensão no seu editor de texto, como a [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) disponível para VSCode, no momento que você está editando o código, é possível ver quem foi o último a modificar aquela linha, quando, e a mensagem do commit.
+
+Olha que beleza, no momento que você está construindo a nova solução ou entendendo a última, você consegue saber o que a última pessoa que modificou aquilo estava pensando. Sem a necessidade de tomar tempo dela ou tentar fazer ela relembrar — o que pode ser impossível.
+
+<figure style="text-align: center;">
+  <img src={gif}></img>
+  <figcaption>Bom, o que a gente está esperando?</figcaption>
+</figure>
+
+## Conclusão
+
+O commit é formado pela descrição curta (também chamada de título) e pela descrição longa, pouquíssimo utilizada. Utilizar a descrição longa para:
+
+- Conectar o commit e o código que é parte dele com a demanda (o ticket no JIRA, o card do trello, quem pediu, o que pediu, as restrições que pediram para respeitar, e etc)
+- Explicar as razões por trás da solução. Quais foram as decisões tomadas para solucionar aquilo daquela forma.
+
+São pequenas informações que muitas vezes são perdidas ao longo do tempo. O registro delas pode ajudar seus colegas ou o você do futuro a tomar decisões melhores e escrever soluções melhores!
