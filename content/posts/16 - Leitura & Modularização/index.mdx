@@ -1,0 +1,30 @@
+---
+slug: "leituras-on-the-criteria-to-be-used-in-decomposing-systems-into-modules"
+title: "Lendo clássicos: On the Criteria To Be Used in Decomposing Systems into Modules"
+date: "2023-07-25"
+description: "Lendo um dos artigos clássicos da computação - On the Criteria To Be Used in Decomposing Systems into Modules"
+tags:
+  - ciência
+  - artigo-clássico
+---
+
+Recentemente comecei a fazer o curso "Fundamentals of Systems Design" do [AlgoDaily](https://algodaily.com/). Na introdução são mencionados o blog post [10 technical papers every programmer should read at least twice](http://blog.fogus.me/2011/09/08/10-technical-papers-every-programmer-should-read-at-least-twice/), bem como o repositório [Papers we love](https://github.com/papers-we-love/papers-we-love/tree/main), recomendando a leitura de artigos científicos da área da computação, coisa que pouquíssimas pessoas fazem. Achei uma boa ideia e meio que um desafio, não é das leituras mais agradáveis né?
+
+Eu cheguei a ler artigos da área durante a faculdade, talvez não tantos quanto deveria, mas com um objetivo melhor definido. Como o clássico [Computing Machinery and Intelligence](https://academic.oup.com/mind/article/LIX/236/433/986238) do Alan Turing (já agradeceu hoje?) como introdução a disciplina de Inteligência Artificial, ou artigos que serviriam de referência para artigos/trabalhos que estavam sendo escritos. Ler meio que sem rumo foi a primeira vez que vi alguém propondo.
+
+<figure style="text-align: center;">
+  <img src="https://i.kym-cdn.com/photos/images/original/002/322/009/e04.jpg"></img>
+  <figcaption>
+    O Governo do UK não agradeceu ao ateu, homossexual, pai da ciência da
+    computação.
+  </figcaption>
+</figure>
+
+Como primeira leitura, resolvi escolher um curto que encontrei no repo Papers We Love, chamado [On the Criteria To Be Used in Decomposing Systems into Modules](http://web.archive.org/web/20121017182047/http://sunnyday.mit.edu/16.355/parnas-criteria.html) escrito por D.L. Parnas. Ele traz uma ideia interessante através da solução para um sistema fictício. O texto é de 1996, obviamente, datado. O problema menciona questões que um dos módulos tem que tratar que com linguagens modernas sequer seria uma questão.
+
+Mas a abstração é o que vale. A ideia apresentada e defendida pelo artigo é que a modularização deveria ser pensada a partir dos pontos que pensamos ser os mais desafiadores em uma questão de design ou aqueles que potencialmente irão mudar levando em conta a incerteza dos requisitos. Ao invés da abordagem mais comum que é traçarmos etapas de execução e separar os módulos de acordo com essas etapas.
+
+Isso pode ser aplicado de diversas formas, mas os pontos pertinentes pra mim:
+
+- Usar a abordagem mais comum ao meu favor, naturalmente eu vou pensar nas etapas. Mas ao invés de modularizar dessa forma, tentar trabalhar um pouco o que essas etapas vão ter comum, quais as relações entre elas. Talvez elas precisem de um módulo a parte e que ambas utilizem esse módulo.
+- Onde está a incerteza aqui? O que desse processo é comum mudar? Tentar criar um módulo que encapsula essas incertezas e padroniza para o restante do sistema. Desse modo, sempre que isso mudar e demandar uma mudança no código, eu possa mudar apenas esse módulo e não sair fazendo mudancinhas em várias partes.
